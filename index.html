@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIHEICH MX // SYSTEM LOADING</title>
+    <title>MIHEICH MX // SYSTEM MAINTENANCE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;0,800;1,400&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * {
             margin: 0;
@@ -14,17 +15,16 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #0A0E32;
+            background-color: #060812;
             color: #E2E8F0;
             font-family: 'JetBrains Mono', monospace;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
-        /* Кибер-сетка на фоне */
         body::before {
             content: '';
             position: absolute;
@@ -34,83 +34,278 @@
                 linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none;
+            z-index: 0;
         }
-        .container {
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .container-box {
             position: relative;
-            z-index: 1;
+            z-index: 10;
             text-align: center;
-            padding: 2.5rem;
-            background: rgba(10, 14, 50, 0.85);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 2.5rem 2rem;
+            background: rgba(12, 16, 33, 0.9);
+            border: 1px solid rgba(0, 240, 255, 0.4);
             border-radius: 16px;
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(247, 22, 181, 0.1);
-            max-width: 520px;
-            width: 90%;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.15), inset 0 0 25px rgba(255, 0, 127, 0.1);
+            max-width: 580px;
+            width: 92%;
+            backdrop-filter: blur(10px);
         }
         .tag {
             display: inline-block;
             color: #00F0FF;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            margin-bottom: 1.2rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            border: 1px solid rgba(0, 240, 255, 0.4);
-            padding: 4px 12px;
+            font-weight: 700;
+            background: rgba(0, 240, 255, 0.1);
+            padding: 6px 14px;
             border-radius: 4px;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            margin-bottom: 1.5rem;
         }
-        h1 {
+        .glitch-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-title {
+            font-family: 'Syncopate', 'JetBrains Mono', sans-serif;
             font-size: 2.2rem;
             font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            position: relative;
             color: #FFFFFF;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+            line-height: 1.2;
         }
-        h1 span {
-            color: #F716B5;
-            text-shadow: 0 0 15px rgba(247, 22, 181, 0.8);
+        .glitch-title::before,
+        .glitch-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip: rect(0, 0, 0, 0);
         }
-        p {
-            color: #94A3B8;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
+        .glitch-title::before {
+            left: -2px;
+            text-shadow: 2px 0 #00F0FF;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
         }
-        .status-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            color: #00F0FF;
-            background: rgba(0, 240, 255, 0.08);
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: 1px dashed rgba(0, 240, 255, 0.3);
+        .glitch-title::after {
+            left: 2px;
+            text-shadow: -2px 0 #FF007F;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
         }
-        .dot {
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 15px, 0); }
+            20% { clip: rect(50px, 9999px, 55px, 0); }
+            40% { clip: rect(10px, 9999px, 85px, 0); }
+            60% { clip: rect(65px, 9999px, 35px, 0); }
+            80% { clip: rect(30px, 9999px, 5px, 0); }
+            100% { clip: rect(80px, 9999px, 95px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(70px, 9999px, 5px, 0); }
+            20% { clip: rect(15px, 9999px, 60px, 0); }
+            40% { clip: rect(90px, 9999px, 20px, 0); }
+            60% { clip: rect(35px, 9999px, 80px, 0); }
+            80% { clip: rect(5px, 9999px, 45px, 0); }
+            100% { clip: rect(60px, 9999px, 10px, 0); }
+        }
+        .status-dot {
+            display: inline-block;
             width: 8px;
             height: 8px;
-            background: #00F0FF;
+            background-color: #39FF14;
             border-radius: 50%;
-            box-shadow: 0 0 8px #00F0FF;
-            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 10px #39FF14;
+            animation: pulse-dot 1.5s infinite;
+            margin-right: 6px;
         }
-        @keyframes pulse {
+        @keyframes pulse-dot {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.7); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+        .progress-bar-container {
+            width: 100%;
+            background: rgba(6, 8, 18, 0.8);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            position: relative;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 78%;
+            background: linear-gradient(90deg, #2B3EFF, #FF007F, #00F0FF);
+            background-size: 200% 100%;
+            animation: gradient-move 3s infinite linear;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
+            border-radius: 7px;
+        }
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .cyber-terminal {
+            background: #04060E;
+            border: 1px solid rgba(43, 62, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.72rem;
+            color: #94A3B8;
+            text-align: left;
+            margin-top: 1.5rem;
+            height: 85px;
+            overflow: hidden;
+            position: relative;
+        }
+        .btn-cyber {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #0C1021;
+            color: #FFFFFF;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            z-index: 1;
+        }
+        .btn-cyber::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 8px;
+            padding: 1px;
+            background: linear-gradient(90deg, #FF007F, #00F0FF);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: -1;
+        }
+        .btn-cyber:hover {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+            color: #00F0FF;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="tag">System Status</div>
-        <h1>MIHEICH<span>.MX</span></h1>
-        <p>Инженерный B2B Digital: Веб-разработка, Яндекс.Директ, Геомаркетинг и Презентации.</p>
-        <div class="status-box">
-            <div class="dot"></div>
-            <span>Развертывание основного интерфейса...</span>
+
+    <div class="scanline"></div>
+
+    <div class="container-box">
+        
+        <div class="tag">
+            <span class="status-dot"></span> SYSTEM MAINTENANCE // v2.5
         </div>
+
+        <div class="mb-4">
+            <div class="glitch-wrapper">
+                <h1 class="glitch-title" data-text="САЙТ НА РЕМОНТЕ">САЙТ НА РЕМОНТЕ</h1>
+            </div>
+        </div>
+
+        <p class="text-sm text-gray-300 leading-relaxed max-w-md mx-auto mb-2 font-medium">
+            Идет плановая модернизация кибернетических систем и веб-модулей <span class="text-cyan-400 font-semibold">MIHEICH MX</span>.
+        </p>
+
+        <p class="text-xs text-fuchsia-400 tracking-wide uppercase font-semibold">
+            // Оптимизация ядра B2B-продаж и трафика
+        </p>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill"></div>
+        </div>
+        <div class="flex justify-between text-[11px] text-gray-400 font-mono">
+            <span>UPGRADING CORE MODULES</span>
+            <span class="text-cyan-400 font-bold" id="progress-percent">78%</span>
+        </div>
+
+        <div class="cyber-terminal">
+            <div class="text-cyan-400 font-bold mb-1">[ TERMINAL LOG ]</div>
+            <div id="log-output" class="space-y-1">
+                <div>> Initializing core rewrite... <span class="text-emerald-400">[OK]</span></div>
+                <div>> Calibrating Direct & Traffic pipelines... <span class="text-emerald-400">[OK]</span></div>
+                <div>> Deploying new cyber UI/UX components... <span class="text-yellow-400">[IN PROGRESS]</span></div>
+            </div>
+        </div>
+
+        <div class="mt-6 pt-5 border-t border-gray-800/80">
+            <div class="text-xs text-gray-400 uppercase tracking-wider mb-3 font-semibold">
+                Терминал связи с инженером:
+            </div>
+            <div class="flex flex-wrap justify-center gap-3">
+                <a href="https://t.me/MiheichMX" target="_blank" class="btn-cyber">
+                    <span>Telegram</span> @MiheichMX
+                </a>
+                <a href="mailto:miheich-master@ya.ru" class="btn-cyber">
+                    <span>Email</span> Email
+                </a>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        const logs = [
+            "> Re-indexing database structures... [OK]",
+            "> Compiling Tailwind & Cyber styles... [OK]",
+            "> Upgrading security shields... [OK]",
+            "> Syncing Yandex.Direct lead channels... [OK]",
+            "> Final testing in progress... [99%]"
+        ];
+        
+        let logIndex = 0;
+        const logOutput = document.getElementById('log-output');
+        
+        setInterval(() => {
+            if (logIndex < logs.length) {
+                const newLog = document.createElement('div');
+                newLog.innerHTML = logs[logIndex];
+                logOutput.appendChild(newLog);
+                if (logOutput.children.length > 3) {
+                    logOutput.removeChild(logOutput.children[1]);
+                }
+                logIndex++;
+            }
+        }, 2500);
+
+        let currentPercent = 78;
+        const percentEl = document.getElementById('progress-percent');
+        setInterval(() => {
+            if (currentPercent < 99) {
+                currentPercent += Math.floor(Math.random() * 2) + 1;
+                percentEl.textContent = currentPercent + '%';
+            }
+        }, 3500);
+    </script>
 </body>
 </html>
