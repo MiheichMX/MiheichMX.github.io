@@ -633,3 +633,127 @@ transform:none;
         align-items: flex-start;
     }
 }
+
+/* --- КИБЕР-ВСПЫШКА ПРИ ПЕРЕХОДЕ ИЗ МЕНЮ --- */
+section:target {
+    animation: target-flash 0.8s ease-out;
+}
+
+@keyframes target-flash {
+    0% { box-shadow: inset 0 0 0px transparent; }
+    15% { box-shadow: inset 0 0 100px rgba(255, 59, 207, 0.25), inset 0 0 30px rgba(52, 215, 255, 0.35); }
+    100% { box-shadow: inset 0 0 0px transparent; }
+}
+
+/* --- ФИКС ВСПЫШКИ ДЛЯ КОНТАКТОВ --- */
+
+/* Отключаем дефолтную вспышку для всего футера (ее перекрывал фон) */
+#contact:target {
+    animation: none;
+}
+
+/* Зажигаем конкретно правую колонку (Терминал связи) */
+#contact:target .contact-grid > div:last-child {
+    animation: terminal-flash 1.2s ease-out;
+    border-radius: 12px; /* Чтобы фон вспыхнул с мягкими углами */
+}
+
+@keyframes terminal-flash {
+    0% { background: transparent; box-shadow: 0 0 0 transparent; }
+    15% { 
+        background: rgba(255, 59, 207, 0.15); /* Розовая подсветка фона колонки */
+        box-shadow: 0 0 40px rgba(255, 59, 207, 0.5); /* Внешнее неоновое облако */
+    }
+    100% { background: transparent; box-shadow: 0 0 0 transparent; }
+}
+
+/* --- УКРАШАЛКА ВМЕСТО КНОПОК В СТЕКЕ --- */
+/* Статичная линия с плавным пульсированием */
+.decor-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;          /* Никуда не бежит, прибита слева */
+    top: 0;           /* Встает ровно на серую линию */
+    height: 2px;      /* Сделали тоньше */
+    width: 65px;      /* Сделали длиннее */
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    border-radius: 2px;
+    animation: pulse-glow 3.5s infinite ease-in-out; /* Медленное дыхание */
+}
+
+.stack-card:nth-child(1) .decor-bar::after,
+.stack-card:nth-child(3) .decor-bar::after {
+    background: var(--pink);
+    box-shadow: 0 0 10px var(--pink);
+}
+
+/* Анимация медленного угасания и вспышки */
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 1; }
+}
+
+/* --- СИНХРОНИЗАЦИЯ ОТСТУПОВ ЗАГОЛОВКОВ --- */
+.geo-layout {
+    margin-top: 35px !important; /* Уравниваем с кейсами и системами */
+}
+
+/* --- ГРАДИЕНТ И РАЗМЕР ШРИФТА ДЛЯ СЛОГАНА В ФУТЕРЕ --- */
+.footer-tagline {
+    font-size: 20px !important; /* Увеличили размер */
+    line-height: 1.2 !important;
+    background: linear-gradient(135deg, var(--pink) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-transform: uppercase;
+}
+
+/* --- КИБЕР-ИКОНКИ В ТЕРМИНАЛЕ СВЯЗИ --- */
+.cyber-contacts a {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.cyber-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(9, 16, 27, 0.8);
+    transition: all 0.3s ease;
+}
+
+.cyber-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--muted);
+    transition: all 0.3s ease;
+}
+
+/* Ховер-эффект для Telegram (голубой неон) */
+.cyber-contacts a:hover .tg-icon {
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px rgba(50, 215, 255, 0.4), inset 0 0 6px rgba(50, 215, 255, 0.2);
+}
+.cyber-contacts a:hover .tg-icon svg {
+    stroke: var(--cyan);
+    filter: drop-shadow(0 0 3px var(--cyan));
+}
+
+/* Ховер-эффект для Почты (розовый неон) */
+.cyber-contacts a:hover .mail-icon {
+    border-color: var(--pink);
+    box-shadow: 0 0 12px rgba(255, 59, 207, 0.4), inset 0 0 6px rgba(255, 59, 207, 0.2);
+}
+.cyber-contacts a:hover .mail-icon svg {
+    stroke: var(--pink);
+    filter: drop-shadow(0 0 3px var(--pink));
+}
