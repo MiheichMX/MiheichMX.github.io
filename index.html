@@ -1,311 +1,261 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIHEICH MX // SYSTEM MAINTENANCE</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;0,800;1,400&family=Syncopate:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #060812;
-            color: #E2E8F0;
-            font-family: 'JetBrains Mono', monospace;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.25) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 20;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-        .container-box {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2.5rem 2rem;
-            background: rgba(12, 16, 33, 0.9);
-            border: 1px solid rgba(0, 240, 255, 0.4);
-            border-radius: 16px;
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.15), inset 0 0 25px rgba(255, 0, 127, 0.1);
-            max-width: 580px;
-            width: 92%;
-            backdrop-filter: blur(10px);
-        }
-        .tag {
-            display: inline-block;
-            color: #00F0FF;
-            font-size: 0.75rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            font-weight: 700;
-            background: rgba(0, 240, 255, 0.1);
-            padding: 6px 14px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            margin-bottom: 1.5rem;
-        }
-        .glitch-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        .glitch-title {
-            font-family: 'Syncopate', 'JetBrains Mono', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            position: relative;
-            color: #FFFFFF;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
-            line-height: 1.2;
-        }
-        .glitch-title::before,
-        .glitch-title::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            clip: rect(0, 0, 0, 0);
-        }
-        .glitch-title::before {
-            left: -2px;
-            text-shadow: 2px 0 #00F0FF;
-            animation: glitch-anim-1 2s infinite linear alternate-reverse;
-        }
-        .glitch-title::after {
-            left: 2px;
-            text-shadow: -2px 0 #FF007F;
-            animation: glitch-anim-2 3s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim-1 {
-            0% { clip: rect(20px, 9999px, 15px, 0); }
-            20% { clip: rect(50px, 9999px, 55px, 0); }
-            40% { clip: rect(10px, 9999px, 85px, 0); }
-            60% { clip: rect(65px, 9999px, 35px, 0); }
-            80% { clip: rect(30px, 9999px, 5px, 0); }
-            100% { clip: rect(80px, 9999px, 95px, 0); }
-        }
-        @keyframes glitch-anim-2 {
-            0% { clip: rect(70px, 9999px, 5px, 0); }
-            20% { clip: rect(15px, 9999px, 60px, 0); }
-            40% { clip: rect(90px, 9999px, 20px, 0); }
-            60% { clip: rect(35px, 9999px, 80px, 0); }
-            80% { clip: rect(5px, 9999px, 45px, 0); }
-            100% { clip: rect(60px, 9999px, 10px, 0); }
-        }
-        .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #39FF14;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #39FF14;
-            animation: pulse-dot 1.5s infinite;
-            margin-right: 6px;
-        }
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-        .progress-bar-container {
-            width: 100%;
-            background: rgba(6, 8, 18, 0.8);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            height: 14px;
-            border-radius: 7px;
-            overflow: hidden;
-            position: relative;
-            margin: 1.5rem 0 0.5rem 0;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            width: 78%;
-            background: linear-gradient(90deg, #2B3EFF, #FF007F, #00F0FF);
-            background-size: 200% 100%;
-            animation: gradient-move 3s infinite linear;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.8);
-            border-radius: 7px;
-        }
-        @keyframes gradient-move {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .cyber-terminal {
-            background: #04060E;
-            border: 1px solid rgba(43, 62, 255, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.72rem;
-            color: #94A3B8;
-            text-align: left;
-            margin-top: 1.5rem;
-            height: 85px;
-            overflow: hidden;
-            position: relative;
-        }
-        .btn-cyber {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: #0C1021;
-            color: #FFFFFF;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            z-index: 1;
-        }
-        .btn-cyber::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 8px;
-            padding: 1px;
-            background: linear-gradient(90deg, #FF007F, #00F0FF);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            z-index: -1;
-        }
-        .btn-cyber:hover {
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-            transform: translateY(-2px);
-            color: #00F0FF;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070a12">
+  <meta name="description" content="MIHEICH MX — сайты, трафик, продажи, инженерный стек и B2B digital-системы.">
+  <title>MIHEICH MX — B2B DIGITAL СИСТЕМЫ</title>
+  <link rel="icon" href="assets/favicon/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body id="top">
+  <header class="topbar">
+    <a class="logo-link" href="#top" aria-label="MIHEICH MX">
+      <img src="assets/logo/logo_mx.png" alt="MIHEICH MX">
+    </a>
 
-    <div class="scanline"></div>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
+      <span></span><span></span><span></span>
+    </button>
 
-    <div class="container-box">
+    <nav class="site-nav" id="site-nav">
+      <a href="#services">ИНЖЕНЕРНЫЙ СТЕК</a>
+      <a href="#presentations">ПРЕЗЕНТАЦИИ</a>
+      <a href="#geo">ГЕОМАРКЕТИНГ</a>
+      <a href="#web">WEB-САЙТЫ</a>
+      <a href="#contact">КОНТАКТЫ</a>
+    </nav>
+
+    <a class="nav-cta" href="https://t.me/MiheichMX?text=Привет!%20Хочу%20обсудить%20запуск%20веб-системы" target="_blank" rel="noopener noreferrer">ПРОТОКОЛ СВЯЗИ</a>
+  </header>
+
+  <main>
+    <section class="hero section-shell">
+      <div class="hero-bg"></div>
+      <div class="hero-vignette"></div>
+      <div class="hero-content">
+        <div class="eyebrow">✦ B2B DIGITAL СИСТЕМЫ</div>
+        <h1><span>САЙТЫ</span><span>ТРАФИК</span><strong>ПРОДАЖИ</strong></h1>
+        <p class="hero-lead">Разрабатываю отказоустойчивые<br>веб-проекты и упаковываю <em>смыслы</em></p>
+        <a class="ghost-btn hero-btn" href="#cases">Смотреть кейсы</a>
+      </div>
+      <div class="hero-orbit">
+        <div class="hero-ring ring-a"></div>
+        <div class="hero-ring ring-b"></div>
+        <div class="hero-scanline"></div>
+      </div>
+<!-- НОВЫЙ БЛОК АВАТАРА -->
+      <div class="hero-avatar">
+        <img src="assets/avatar/social_media_avatar.webp" alt="MIHEICH">
+      </div>
+      <div class="metrics">
+        <article class="metric">
+          <img src="assets/icons/header_plate_3_in_1.png" alt="">
+          <div><b>3 в 1</b><span>Архитектура · Трафик · Дизайн</span></div>
+        </article>
+        <article class="metric">
+          <img src="assets/icons/header_plate_100_percent_1.png" alt="">
+          <div><b>100%</b><span>КОНТРОЛЬ ВСЕХ ПРОЦЕССОВ</span></div>
+        </article>
+        <article class="metric">
+          <img src="assets/icons/header_plate_100_percent_2.png" alt="">
+          <div><b>100%</b><span>Погружение в ваш бизнес</span></div>
+        </article>
+        <article class="metric">
+          <img src="assets/icons/header_plate_24_7.png" alt="">
+          <div><b>24/7</b><span>СТАБИЛЬНОСТЬ РЕШЕНИЙ</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="stack section-shell" id="services">
+      <div class="stack-plate">
+        <div class="section-title-row">
+          <h2 class="title-terminator">ЧТО ВЫ ПОЛУЧАЕТЕ</h2>
+          <div class="kicker-pink">Инженерный стек</div>
+        </div>
+
+        <div class="stack-grid">
+          <article class="stack-card">
+            <div class="card-icon"><img src="assets/icons/engineering_stack_web.png" alt=""></div>
+            <div class="card-index">01</div>
+            <h3>ВЕБ-РАЗРАБОТКА</h3>
+            <p class="card-main">Лендинги, B2B-каталоги<br>и сложные интернет-магазины</p>
+            <p class="card-sub">Отказоустойчивый код, быстрый поиск и адаптация</p>
+            <a href="#contact" class="card-link">Обсудить →</a>
+          </article>
+
+          <article class="stack-card">
+            <div class="card-icon"><img src="assets/icons/engineering_stack_geo.png" alt=""></div>
+            <div class="card-index">02</div>
+            <h3 class="cyan">ГЕОМАРКЕТИНГ</h3>
+            <p class="card-main">Полная упаковка профиля и вывод бизнеса в топ геовыдачи</p>
+            <p class="card-sub">Управление репутацией и стабильный поток звонков с карт</p>
+            <a href="#contact" class="card-link">Обсудить →</a>
+          </article>
+
+          <article class="stack-card">
+            <div class="card-icon"><img src="assets/icons/engineering_stack_direct.png" alt=""></div>
+            <div class="card-index">03</div>
+            <h3>ЯНДЕКС.ДИРЕКТ</h3>
+            <p class="card-main">Снайперская настройка рекламы на Поиске и в РСЯ</p>
+            <p class="card-sub">Горячие лиды с понятной ценой без слива бюджетов</p>
+            <a href="#contact" class="card-link">Обсудить →</a>
+          </article>
+
+          <article class="stack-card">
+            <div class="card-icon"><img src="assets/icons/engineering_stack_presentations.png" alt=""></div>
+            <div class="card-index">04</div>
+            <h3 class="cyan">ПРЕЗЕНТАЦИИ</h3>
+            <p class="card-main">Коммерческие предложения и презы для закрытия сделок</p>
+            <p class="card-sub">Захват внимания ЛПР за 3 секунды и пробитие баннерной слепоты</p>
+            <a href="#contact" class="card-link">Обсудить →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ОБЩИЙ КОНТЕЙНЕР ДЛЯ ДВУХ КОЛОНОК -->
+    <!-- ПРЕЗЕНТАЦИИ (Без лишних оберток) -->
+    <section class="cases section-shell" id="presentations">
+      <div class="section-title-row">
+        <div>
+          <h2 class="title-terminator">ПРЕЗЕНТАЦИИ <span>КЕЙСЫ</span></h2>
+        </div>
+      </div>
+
+      <div class="cases-grid">
+        <figure><img src="assets/cases/case_1_presentation.png" alt="Кейс 1"></figure>
+        <figure><img src="assets/cases/case_2_presentation.png" alt="Кейс 2"></figure>
+        <figure><img src="assets/cases/case_3_presentation.png" alt="Кейс 3"></figure>
+        <figure><img src="assets/cases/case_4_presentation.png" alt="Кейс 4"></figure>
+      </div>
+    </section>
+
+      <!-- ГЕОМАРКЕТИНГ (Теперь на всю ширину) -->
+    <section class="geo-showcase section-shell" id="geo">
+      <div class="section-title-row">
+        <div>
+          <h2 class="title-terminator">УПАКОВКА <span>ЯНДЕКС КАРТ</span></h2>
+        </div>
+      </div>
+
+      <div class="geo-layout">
+        <!-- Левый блок: Текст (прижат к верху) и Картинка (прижата к низу) -->
+        <div class="geo-copy">
+          <div class="geo-text-content">
+            <p class="lead-text">Собираю профиль бизнеса так, чтобы карта работала как отдельный канал заявок.</p>
+            <div class="geo-badges">
+              <span>МАРШРУТЫ</span><span>ЗВОНКИ</span><span>САЙТ</span>
+            </div>
+            <p class="muted-text">Позиционирование, визуалы, карточка, отзывы и связка с сайтом.</p>
+          </div>
+          <div class="geo-cyber-img">
+            <img src="assets/maps/geo_cyber_map.webp" alt="Кибер-карта Яндекс">
+          </div>
+        </div>
+
+        <!-- Правый блок: 4 скриншота в ряд -->
+        <div class="maps-grid">
+          <img src="assets/maps/yandex_maps_1.png" alt="Яндекс Карты 1">
+          <img src="assets/maps/yandex_maps_2.png" alt="Яндекс Карты 2">
+          <img src="assets/maps/yandex_maps_3.png" alt="Яндекс Карты 3">
+          <img src="assets/maps/yandex_maps_4.png" alt="Яндекс Карты 4">
+        </div>
+      </div>
+    </section>
+    
+
+<section class="systems section-shell" id="web">
+      <div class="section-title-row">
+        <div>
+          <h2 class="title-terminator">БОЕВЫЕ <span>ВЕБ-СИСТЕМЫ</span></h2>
+        </div>
+      </div>
+
+      <div class="system-grid">
+        <article class="system-card">
+          <div class="system-top"><span>01</span><span>Автобизнес</span></div>
+          <h3>Премиум Техцентр</h3>
+          <div class="perspective-img">
+            <img src="assets/systems/web_system_premauto.png" alt="Премиум Техцентр">
+          </div>
+          <p>Трафик конвертируется напрямую в запись на подъёмник</p>
+          <div class="chips"><span>Директ</span><span>Лендинг</span><span>Лидген</span></div>
+        </article>
+
+        <article class="system-card">
+          <div class="system-top"><span>02</span><span>B2B Каталог</span></div>
+          <h3>Запчасти КамАЗ</h3>
+          <div class="perspective-img">
+            <img src="assets/systems/web_system_avtoelit.png" alt="Каталог запчастей КамАЗ">
+          </div>
+          <p>Заказ деталей оформляется в пару кликов без нервов</p>
+          <div class="chips"><span>E-commerce</span><span>Базы данных</span><span>Поиск</span></div>
+        </article>
+
+        <article class="system-card">
+          <div class="system-top"><span>03</span><span>Технологии</span></div>
+          <h3>Аддитивы <em>AG</em></h3>
+          <div class="perspective-img">
+            <img src="assets/systems/web_system_ag.png" alt="Аддитивы AG">
+          </div>
+          <p>Убойные офферы системно собирают лиды с рынка</p>
+          <div class="chips"><span>Директ</span><span>Лендинг</span><span>Лидген</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact section-shell" id="contact">
+      <div class="contact-bg"></div>
+      <div class="contact-grid">
         
-        <div class="tag">
-            <span class="status-dot"></span> SYSTEM MAINTENANCE // v2.5
+        <!-- Колонка 1: Бренд и Аватар -->
+        <div class="contact-brand">
+          <div class="avatar-gradient-frame">
+            <img class="footer-avatar" src="assets/avatar/social_media_avatar_footer.webp" alt="MIHEICH">
+          </div>
+          <div class="footer-tagline">Разработка и упаковка<br>отказоустойчивых b2b систем</div>
         </div>
 
-        <div class="mb-4">
-            <div class="glitch-wrapper">
-                <h1 class="glitch-title" data-text="САЙТ НА РЕМОНТЕ">САЙТ НА РЕМОНТЕ</h1>
-            </div>
+        <!-- Колонка 2: Командный хаб -->
+        <div>
+          <div class="kicker">КОМАНДНЫЙ ХАБ</div>
+          <nav class="footer-nav">
+  <a href="#services">Инженерный стек</a>
+  <a href="#presentations">Презентации</a>
+  <a href="#geo">Геомаркетинг</a>
+  <a href="#web">WEB-сайты</a>
+  <a href="#contact">Контакты</a>
+</nav>
         </div>
 
-        <p class="text-sm text-gray-300 leading-relaxed max-w-md mx-auto mb-2 font-medium">
-            Идет плановая модернизация кибернетических систем и веб-модулей <span class="text-cyan-400 font-semibold">MIHEICH MX</span>.
-        </p>
-
-        <p class="text-xs text-fuchsia-400 tracking-wide uppercase font-semibold">
-            // Оптимизация ядра B2B-продаж и трафика
-        </p>
-
-        <div class="progress-bar-container">
-            <div class="progress-bar-fill"></div>
-        </div>
-        <div class="flex justify-between text-[11px] text-gray-400 font-mono">
-            <span>UPGRADING CORE MODULES</span>
-            <span class="text-cyan-400 font-bold" id="progress-percent">78%</span>
+        <!-- Колонка 3: Пустота под партнерские ссылки -->
+        <div class="partner-space">
+          <div class="kicker">ПАРТНЕРСКАЯ СЕТЬ</div>
+          <div class="empty-slot">Блок в разработке...</div>
         </div>
 
-        <div class="cyber-terminal">
-            <div class="text-cyan-400 font-bold mb-1">[ TERMINAL LOG ]</div>
-            <div id="log-output" class="space-y-1">
-                <div>> Initializing core rewrite... <span class="text-emerald-400">[OK]</span></div>
-                <div>> Calibrating Direct & Traffic pipelines... <span class="text-emerald-400">[OK]</span></div>
-                <div>> Deploying new cyber UI/UX components... <span class="text-yellow-400">[IN PROGRESS]</span></div>
-            </div>
+        <!-- Колонка 4: Терминал связи -->
+        <div>
+          <div class="kicker">ТЕРМИНАЛ СВЯЗИ</div>
+          <a class="ghost-btn contact-btn" href="mailto:miheich-master@ya.ru?subject=Обсудить%20проект">ОБСУДИТЬ ПРОЕКТ</a>
+          <div class="contact-links">
+            <a href="https://t.me/MiheichMX" target="_blank" rel="noreferrer">@MiheichMX</a>
+            <a href="https://t.me/MiheichMaster" target="_blank" rel="noreferrer">@MiheichMaster</a>
+            <a href="mailto:miheich-master@ya.ru">miheich-master@ya.ru</a>
+          </div>
         </div>
+      </div>
 
-        <div class="mt-6 pt-5 border-t border-gray-800/80">
-            <div class="text-xs text-gray-400 uppercase tracking-wider mb-3 font-semibold">
-                Терминал связи с инженером:
-            </div>
-            <div class="flex flex-wrap justify-center gap-3">
-                <a href="https://t.me/MiheichMX" target="_blank" class="btn-cyber">
-                    <span>Telegram</span> @MiheichMX
-                </a>
-                <a href="mailto:miheich-master@ya.ru" class="btn-cyber">
-                    <span>Email</span> Email
-                </a>
-            </div>
-        </div>
+      <div class="footer-bottom">
+        <span>© 2026 MIHEICH MX.</span> Все системы функционируют в штатном режиме.
+        <a href="#">Политика конфиденциальности</a>
+      </div>
+    </section>
+  </main>
 
-    </div>
-
-    <script>
-        const logs = [
-            "> Re-indexing database structures... [OK]",
-            "> Compiling Tailwind & Cyber styles... [OK]",
-            "> Upgrading security shields... [OK]",
-            "> Syncing Yandex.Direct lead channels... [OK]",
-            "> Final testing in progress... [99%]"
-        ];
-        
-        let logIndex = 0;
-        const logOutput = document.getElementById('log-output');
-        
-        setInterval(() => {
-            if (logIndex < logs.length) {
-                const newLog = document.createElement('div');
-                newLog.innerHTML = logs[logIndex];
-                logOutput.appendChild(newLog);
-                if (logOutput.children.length > 3) {
-                    logOutput.removeChild(logOutput.children[1]);
-                }
-                logIndex++;
-            }
-        }, 2500);
-
-        let currentPercent = 78;
-        const percentEl = document.getElementById('progress-percent');
-        setInterval(() => {
-            if (currentPercent < 99) {
-                currentPercent += Math.floor(Math.random() * 2) + 1;
-                percentEl.textContent = currentPercent + '%';
-            }
-        }, 3500);
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
