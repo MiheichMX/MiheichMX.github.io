@@ -916,3 +916,25 @@ section:target {
     align-items: center;
     z-index: 5;
 }
+
+/* Единый контейнер аватара */
+.hero-avatar {
+    position: absolute;
+    left: 50%; /* Центрируем по горизонтали */
+    bottom: 200px; /* Приподнимаем, чтобы ноги стояли ровно на плашке метрик */
+    transform: translateX(-50%); /* Идеальное выравнивание центра */
+    width: 100%;
+    max-width: 600px; /* Масштаб босса, но без искажений макета */
+    z-index: 5; /* Держим поверх остальных фоновых элементов */
+    pointer-events: none; /* Чтобы он не перекрывал клики по ссылкам */
+}
+
+/* Сам кибер-бро */
+.cyber-avatar {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    animation: float 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4)) 
+            drop-shadow(0 0 40px rgba(255, 0, 128, 0.2)); 
+}
