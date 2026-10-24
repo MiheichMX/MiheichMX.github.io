@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSE | Цифровая эстетика</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&family=Playfair+Display:ital@1&family=Unbounded:wght@800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === BASE VARS & RESET === */
+        :root {
+            /* Яркий изумрудно-неоновый фон */
+            --bg: #02120e;
+            --fg: #e6f2ee;
+            --fg-muted: rgba(230, 242, 238, 0.6);
+            --border: rgba(230, 242, 238, 0.15);
+            --border-hover: rgba(230, 242, 238, 0.4);
+            --font-display: 'Unbounded', sans-serif;
+            --font-body: 'Onest', sans-serif;
+            --font-accent: 'Playfair Display', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #cursor-dot, #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+        #cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #fff;
+        }
+        #cursor-ring {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #fff;
+            transition: width 0.3s cubic-bezier(0.2, 1, 0.3, 1), 
+                        height 0.3s cubic-bezier(0.2, 1, 0.3, 1),
+                        background-color 0.3s;
+            will-change: width, height, transform;
+        }
+        #cursor-ring.hovered {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(255, 255, 255, 1);
+            border-color: transparent;
+            mix-blend-mode: difference;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(230, 242, 238, 0.05);
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--fg);
+        }
+        nav {
+            display: flex;
+            gap: 40px;
+        }
+        nav a {
+            color: var(--fg);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        nav a:hover { opacity: 0.6; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s, transform 0.1s;
+            will-change: transform;
+        }
+        .btn-white {
+            background-color: var(--fg);
+            color: var(--bg);
+            border: 1px solid var(--fg);
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: var(--fg);
+            border: 1px solid var(--border-hover);
+        }
+        .btn-white:hover {
+            background-color: transparent;
+            color: var(--fg);
+        }
+        .btn-outline:hover {
+            background-color: var(--fg);
+            color: var(--bg);
+        }
+
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+        }
+        
+        .hero-title-container {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 7vw, 8rem);
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 24px;
+        }
+        .word { display: inline-flex; white-space: nowrap; }
+        .char {
+            display: inline-block;
+            transform: translateY(120%);
+            filter: blur(10px);
+            opacity: 0;
+            will-change: transform, filter, opacity;
+        }
+        h1 span.italic {
+            font-family: var(--font-accent);
+            text-transform: none;
+            font-style: italic;
+            font-weight: 400;
+            padding-right: 0.1em; 
+        }
+        .subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.5rem);
+            color: var(--fg-muted);
+            max-width: 600px;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s ease 1s forwards;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s ease 1.2s forwards;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .marquee-wrapper {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            overflow: hidden;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            display: flex;
+        }
+        .marquee {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll 30s linear infinite;
+        }
+        .marquee span {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 0 40px;
+            color: var(--fg-muted);
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        #services {
+            padding: 120px 48px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 64px;
+            text-transform: uppercase;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            perspective: 1000px;
+        }
+        .card {
+            border: 1px solid var(--border);
+            padding: 64px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 400px;
+            transition: border-color 0.4s ease;
+            transform-style: preserve-3d;
+            will-change: transform;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .card:hover {
+            border-color: var(--border-hover);
+        }
+        .card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            transform: translateZ(30px);
+        }
+        .card p {
+            color: var(--fg-muted);
+            transform: translateZ(20px);
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 20px; }
+            nav { display: none; } 
+            #services { padding: 80px 20px; }
+            h1 { gap: 10px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .char { transform: none; filter: none; opacity: 1; }
+            #cursor-dot, #cursor-ring { display: none; }
+            * { cursor: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WebGL Background -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Navigation -->
+    <header>
+        <a href="#" class="logo interactive">SYNAPSE</a>
+        <nav>
+            <a href="#" class="interactive">Проекты</a>
+            <a href="#" class="interactive">Инновации</a>
+            <a href="#" class="interactive">Запуск</a>
+        </nav>
+        <a href="#" class="btn btn-white interactive magnetic">Интеграция</a>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section id="hero">
+            <div class="hero-title-container">
+                <h1 id="hero-title">
+                    <span class="word">ЦИФРОВАЯ</span>
+                    <span class="word italic">эстетика</span>
+                </h1>
+            </div>
+            <p class="subtitle">Интерфейсы будущего уже здесь. Фокус на UX, нейросети и чистый код.</p>
+            <div class="hero-btns">
+                <a href="#services" class="btn btn-white interactive magnetic">Изучить стек</a>
+                <a href="#" class="btn btn-outline interactive magnetic">Начать</a>
+            </div>
+
+            <div class="marquee-wrapper">
+                <div class="marquee">
+                    <span>AI MODULES</span><span>MACHINE LEARNING</span><span>REACT</span><span>WEBGL</span><span>NODE.JS</span>
+                    <span>PYTHON</span><span>DATA SCIENCE</span><span>TENSORFLOW</span><span>VUE</span><span>THREE.JS</span>
+                    <span>AI MODULES</span><span>MACHINE LEARNING</span><span>REACT</span><span>WEBGL</span><span>NODE.JS</span>
+                    <span>PYTHON</span><span>DATA SCIENCE</span><span>TENSORFLOW</span><span>VUE</span><span>THREE.JS</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section id="services">
+            <h2 class="section-title">Технологии & Дизайн</h2>
+            <div class="cards">
+                <div class="card interactive">
+                    <h3>Проектирование</h3>
+                    <p>Создаем сложные архитектуры сервисов, где каждая деталь подчинена логике и удобству пользователя.</p>
+                </div>
+                <div class="card interactive">
+                    <h3>AI-интеграции</h3>
+                    <p>Внедряем языковые модели и нейросети для автоматизации процессов и уникального пользовательского опыта.</p>
+                </div>
+                <div class="card interactive">
+                    <h3>Дизайн-системы</h3>
+                    <p>Разрабатываем масштабируемые UI-киты для быстрой сборки проектов любой сложности без потери качества.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!prefersReducedMotion) {
+            const title = document.getElementById('hero-title');
+            const words = title.querySelectorAll('.word');
+            
+            words.forEach(word => {
+                const text = word.textContent.trim();
+                word.innerHTML = ''; 
+                
+                text.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.className = 'char';
+                    if(char === ' ') span.innerHTML = '&nbsp;';
+                    word.appendChild(span);
+                });
+            });
+
+            const chars = document.querySelectorAll('.char');
+            chars.forEach((char, index) => {
+                char.animate([
+                    { transform: 'translateY(120%)', filter: 'blur(10px)', opacity: 0 },
+                    { transform: 'translateY(0)', filter: 'blur(0)', opacity: 1 }
+                ], {
+                    duration: 1000,
+                    easing: 'cubic-bezier(0.19, 1, 0.22, 1)',
+                    delay: index * 40,
+                    fill: 'forwards'
+                });
+            });
+        }
+
+        if (!prefersReducedMotion && window.matchMedia("(pointer: fine)").matches) {
+            const dot = document.getElementById('cursor-dot');
+            const ring = document.getElementById('cursor-ring');
+            
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let ringX = mouseX;
+            let ringY = mouseY;
+            
+            const lerpAmount = 0.15;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+            });
+
+            const renderCursor = () => {
+                ringX += (mouseX - ringX) * lerpAmount;
+                ringY += (mouseY - ringY) * lerpAmount;
+                ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
+                requestAnimationFrame(renderCursor);
+            };
+            renderCursor();
+
+            const interactables = document.querySelectorAll('.interactive');
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+            });
+
+            const magnetics = document.querySelectorAll('.magnetic');
+            magnetics.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const distanceX = e.clientX - centerX;
+                    const distanceY = e.clientY - centerY;
+                    
+                    btn.style.transform = `translate(${distanceX * 0.3}px, ${distanceY * 0.3}px)`;
+                });
+                
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = `translate(0px, 0px)`;
+                });
+            });
+
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; 
+                    const y = e.clientY - rect.top;  
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -10; 
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    card.style.transition = 'transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), border-color 0.4s ease';
+                });
+                
+                card.addEventListener('mouseenter', () => {
+                    card.style.transition = 'border-color 0.4s ease'; 
+                });
+            });
+        }
+
+        if (!prefersReducedMotion) {
+            const canvas = document.getElementById('webgl-canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+            if (gl) {
+                const vsSource = `
+                    attribute vec2 a_position;
+                    void main() {
+                        gl_Position = vec4(a_position, 0.0, 1.0);
+                    }
+                `;
+
+                const fsSource = `
+                    precision highp float;
+                    uniform vec2 u_resolution;
+                    uniform float u_time;
+                    uniform vec2 u_mouse;
+                    uniform vec4 u_clicks[8]; 
+
+                    vec2 hash(vec2 p) {
+                        p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+                        return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+                    }
+
+                    float noise(vec2 p) {
+                        const float K1 = 0.366025404;
+                        const float K2 = 0.211324865;
+                        vec2 i = floor(p + (p.x + p.y) * K1);
+                        vec2 a = p - i + (i.x + i.y) * K2;
+                        vec2 o = (a.x > a.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                        vec2 b = a - o + K2;
+                        vec2 c = a - 1.0 + 2.0 * K2;
+                        vec3 h = max(0.5 - vec3(dot(a, a), dot(b, b), dot(c, c)), 0.0);
+                        vec3 n = h * h * h * h * vec3(dot(a, hash(i + 0.0)), dot(b, hash(i + o)), dot(c, hash(i + 1.0)));
+                        return dot(n, vec3(70.0));
+                    }
+
+                    float fbm(vec2 p) {
+                        float f = 0.0;
+                        float amp = 0.5;
+                        for(int i = 0; i < 4; i++) {
+                            f += amp * noise(p);
+                            p *= 2.0;
+                            amp *= 0.5;
+                        }
+                        return f;
+                    }
+
+                    float pattern(vec2 p) {
+                        vec2 q = vec2(
+                            fbm(p + vec2(0.0, 0.0) + u_time * 0.1),
+                            fbm(p + vec2(5.2, 1.3) + u_time * 0.15)
+                        );
+                        vec2 r = vec2(
+                            fbm(p + 4.0 * q + vec2(1.7, 9.2) + u_time * 0.12),
+                            fbm(p + 4.0 * q + vec2(8.3, 2.8) + u_time * 0.18)
+                        );
+                        return fbm(p + 4.0 * r);
+                    }
+
+                    float map(vec2 p) {
+                        float h = pattern(p * 1.5);
+                        
+                        for(int i = 0; i < 8; i++) {
+                            if(u_clicks[i].w > 0.5) {
+                                vec2 clickPos = (u_clicks[i].xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+                                clickPos.y = -clickPos.y; 
+                                
+                                float dist = length(p - clickPos);
+                                float age = u_time - u_clicks[i].z;
+                                
+                                if(age > 0.0 && age < 4.0) {
+                                    float wave = sin((dist - age * 0.5) * 40.0);
+                                    wave *= exp(-age * 1.5); 
+                                    wave *= smoothstep(0.0, 0.05, dist);
+                                    h += wave * 0.03;
+                                }
+                            }
+                        }
+                        return h;
+                    }
+
+                    void main() {
+                        vec2 p = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+                        vec2 mPos = (u_mouse * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+                        mPos.y = -mPos.y; 
+
+                        float mDist = length(p - mPos);
+                        float refraction = smoothstep(0.2, 0.0, mDist);
+                        
+                        vec2 e = vec2(0.005, 0.0);
+                        vec2 readP = p - refraction * 0.05; 
+                        
+                        float h = map(readP);
+                        float hx = map(readP + e.xy);
+                        float hy = map(readP + e.yx);
+                        
+                        vec3 normal = normalize(vec3(hx - h, hy - h, 0.03)); 
+
+                        vec3 lightPos = vec3(mPos, 0.5); 
+                        vec3 lightDir = normalize(lightPos - vec3(p, h));
+                        vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0) - vec3(p, h));
+                        vec3 halfVector = normalize(lightDir + viewDir);
+
+                        float diff = max(dot(normal, lightDir), 0.0);
+                        float spec = pow(max(dot(normal, halfVector), 0.0), 32.0);
+                        float ambientSpec = pow(max(dot(normal, normalize(vec3(1.0, 1.0, 1.0))), 0.0), 16.0);
+
+                        // НОВЫЕ ЦВЕТА (Яркие, цифровые, неоново-бирюзовые)
+                        vec3 baseColor = vec3(0.02, 0.15, 0.12); // Более светлый и насыщенный фон
+                        vec3 neonColor = vec3(0.0, 1.0, 0.7);    // Яркий цифровой неон
+                        vec3 lightColor = vec3(0.8, 1.0, 0.95);
+
+                        vec3 color = baseColor;
+                        
+                        // 1. Усиливаем общее фоновое свечение
+                        color = mix(color, neonColor, ambientSpec * 0.4);
+                        
+                        // 2. Делаем подсветку от курсора более мощной и "неоновой"
+                        float glow = smoothstep(1.2, 0.0, mDist) * 0.35;
+                        color += neonColor * diff * glow; 
+                        
+                        // 3. Резкие яркие блики
+                        color += lightColor * spec * 1.5 * smoothstep(1.5, 0.0, mDist);
+
+                        // 4. Эффект цифровой голограммы (бегущие сканлайны)
+                        float scanlines = sin(gl_FragCoord.y * 2.5 - u_time * 10.0) * 0.03;
+                        color += neonColor * scanlines;
+
+                        float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233)) + u_time) * 43758.5453) * 0.04;
+                        color += grain;
+
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `;
+
+                const compileShader = (type, source) => {
+                    const shader = gl.createShader(type);
+                    gl.shaderSource(shader, source);
+                    gl.compileShader(shader);
+                    return shader;
+                };
+
+                const vertexShader = compileShader(gl.VERTEX_SHADER, vsSource);
+                const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fsSource);
+
+                const program = gl.createProgram();
+                gl.attachShader(program, vertexShader);
+                gl.attachShader(program, fragmentShader);
+                gl.linkProgram(program);
+                gl.useProgram(program);
+
+                const positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                    -1.0, -1.0,  1.0, -1.0, -1.0,  1.0,
+                    -1.0,  1.0,  1.0, -1.0,  1.0,  1.0
+                ]), gl.STATIC_DRAW);
+
+                const positionLocation = gl.getAttribLocation(program, "a_position");
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+                const resLocation = gl.getUniformLocation(program, "u_resolution");
+                const timeLocation = gl.getUniformLocation(program, "u_time");
+                const mouseLocation = gl.getUniformLocation(program, "u_mouse");
+                const clicksLocation = gl.getUniformLocation(program, "u_clicks");
+
+                let mouse = [window.innerWidth / 2, window.innerHeight / 2];
+                
+                const MAX_CLICKS = 8;
+                let clickArray = new Float32Array(MAX_CLICKS * 4); 
+                let clickIndex = 0;
+
+                window.addEventListener('mousemove', (e) => {
+                    mouse[0] = e.clientX;
+                    mouse[1] = e.clientY;
+                });
+
+                window.addEventListener('click', (e) => {
+                    if(e.target.closest('a') || e.target.closest('button')) return;
+                    const time = performance.now() / 1000.0;
+                    const idx = clickIndex * 4;
+                    clickArray[idx] = e.clientX;     
+                    clickArray[idx+1] = e.clientY;   
+                    clickArray[idx+2] = time;        
+                    clickArray[idx+3] = 1.0;         
+                    clickIndex = (clickIndex + 1) % MAX_CLICKS;
+                });
+
+                const resize = () => {
+                    const dpr = Math.min(window.devicePixelRatio, 2); 
+                    canvas.width = window.innerWidth * dpr;
+                    canvas.height = window.innerHeight * dpr;
+                    gl.viewport(0, 0, canvas.width, canvas.height);
+                    gl.uniform2f(resLocation, canvas.width, canvas.height);
+                };
+                window.addEventListener('resize', resize);
+                resize();
+
+                const render = (time) => {
+                    gl.uniform1f(timeLocation, time * 0.001);
+                    const dpr = Math.min(window.devicePixelRatio, 2);
+                    gl.uniform2f(mouseLocation, mouse[0] * dpr, mouse[1] * dpr);
+                    gl.uniform4fv(clicksLocation, clickArray);
+                    gl.drawArrays(gl.TRIANGLES, 0, 6);
+                    requestAnimationFrame(render);
+                };
+                requestAnimationFrame(render);
+            }
+        }
+    </script>
+</body>
+</html>

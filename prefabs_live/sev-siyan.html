@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Borealis | WebGL Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Сброс и базовые стили */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* Канвас на заднем фоне */
+        #glcanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            display: block;
+        }
+
+        /* Новый слой для реального леса */
+        #forest-layer {
+            position: absolute;
+            bottom: 0;
+            left: -2%; /* Сдвигаем влево, чтобы компенсировать увеличенную ширину */
+            width: 104%; /* Делаем чуть шире экрана, чтобы края не оголялись при наклоне */
+            height: 80%; /* Настрой высоту под свою картинку */
+            background-image: url('sev-siyan.webp'); 
+            background-size: cover;
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            z-index: 5;
+            pointer-events: none;
+            
+            /* МАГИЯ ВЕТРА */
+            transform-origin: bottom center; /* Якорим анимацию строго по нижнему краю */
+            animation: wind-sway 14s ease-in-out infinite; /* Очень плавная бесконечная анимация */
+        }
+
+        /* Ключевые кадры для имитации ветра */
+        @keyframes wind-sway {
+            0%, 100% { 
+                transform: rotate(-0.5deg) skewX(-0.5deg); 
+            }
+            50% { 
+                transform: rotate(0.8deg) skewX(0.8deg); 
+            }
+        }
+
+        /* UI слой поверх канваса */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none; /* Пропускаем клики сквозь контейнер, но разрешим на элементах */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Glassmorphism утилиты */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            pointer-events: auto; /* Возвращаем интерактивность панелям */
+        }
+
+        /* Киберпанк свечение */
+        .glow-text {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 255, 200, 0.7), 
+                         0 0 20px rgba(0, 255, 200, 0.4),
+                         0 0 40px rgba(138, 43, 226, 0.6);
+        }
+
+        .glow-button {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .glow-button:hover::before {
+            left: 100%;
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.4), 
+                        inset 0 0 10px rgba(138, 43, 226, 0.4);
+            border-color: rgba(0, 255, 170, 0.5);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WebGL Canvas -->
+    <canvas id="glcanvas"></canvas>
+
+    <!-- Слой с реальным лесом на прозрачном фоне -->
+    <div id="forest-layer"></div>
+
+    <!-- Glassmorphism UI -->
+    <div id="ui-layer" class="p-6 md:p-12 justify-between">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center">
+            <div class="glass-panel px-6 py-3 rounded-2xl flex items-center gap-3">
+                <div class="w-3 h-3 rounded-full bg-teal-400 shadow-[0_0_10px_#2dd4bf] animate-pulse"></div>
+                <span class="text-white/90 font-bold tracking-widest uppercase text-sm">Sys.Online</span>
+            </div>
+            
+            <nav class="glass-panel px-8 py-3 rounded-2xl hidden md:block">
+                <ul class="flex gap-8 text-white/70 font-medium text-sm">
+                    <li class="hover:text-white transition-colors cursor-pointer">Терминал</li>
+                    <li class="hover:text-white transition-colors cursor-pointer">Сенсоры</li>
+                    <li class="hover:text-teal-300 transition-colors cursor-pointer">Протокол</li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col justify-center max-w-3xl">
+            <div class="glass-panel p-8 md:p-12 rounded-3xl relative overflow-hidden">
+                <!-- Декоративный элемент -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-teal-500/20 blur-[50px] rounded-full pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/20 blur-[50px] rounded-full pointer-events-none"></div>
+                
+                <h2 class="text-teal-400 text-sm font-mono tracking-[0.3em] mb-4 uppercase">Project 0xAurora</h2>
+                <h1 class="text-5xl md:text-7xl font-black mb-6 glow-text tracking-tight leading-tight">
+                    СИНТЕЗ <br> РЕАЛЬНОСТИ
+                </h1>
+                <p class="text-white/70 text-lg mb-10 leading-relaxed font-light max-w-xl">
+                    Процедурная генерация северного сияния с использованием фрактального броуновского движения и доменного искажения. 
+                    </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button class="glow-button glass-panel px-8 py-4 rounded-xl text-white font-semibold uppercase tracking-wider text-sm flex items-center gap-2">
+                        <span>Инициализация</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </button>
+                    <button class="glass-panel px-8 py-4 rounded-xl text-white/60 font-semibold uppercase tracking-wider text-sm hover:text-white transition-colors hover:bg-white/5">
+                        Настройки
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="flex justify-between items-end mt-8">
+            <div class="text-white/40 font-mono text-xs hidden md:block">
+                <div>LAT: 69.6492° N</div>
+                <div>LNG: 18.9553° E</div>
+                <div class="mt-2 text-teal-500/50">Соединение установлено</div>
+            </div>
+            
+            <div class="glass-panel px-6 py-4 rounded-2xl">
+                <div class="text-white/60 text-xs font-mono mb-2">ПОКАЗАТЕЛИ СРЕДЫ</div>
+                <div class="flex gap-6">
+                    <div>
+                        <div class="text-white font-bold">60 FPS</div>
+                        <div class="text-teal-400 text-[10px] uppercase">Рендер</div>
+                    </div>
+                    <div>
+                        <div class="text-white font-bold">GLSL</div>
+                        <div class="text-purple-400 text-[10px] uppercase">Шейдер</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Вершинный шейдер (простой полноэкранный квадрат) -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec2 a_position;
+        void main() {
+            gl_Position = vec4(a_position, 0.0, 1.0);
+        }
+    </script>
+
+    <!-- Фрагментный шейдер (Ядро логики) -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision highp float;
+
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform vec2 u_mouse;
+
+        // Псевдослучайная функция (Хэш)
+        float hash(vec2 p) {
+            p = fract(p * vec2(123.34, 456.21));
+            p += dot(p, p + 45.32);
+            return fract(p.x * p.y);
+        }
+
+        // 2D Value Noise (Шум)
+        float noise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
+            vec2 u = f * f * (3.0 - 2.0 * f);
+
+            float a = hash(i);
+            float b = hash(i + vec2(1.0, 0.0));
+            float c = hash(i + vec2(0.0, 1.0));
+            float d = hash(i + vec2(1.0, 1.0));
+
+            return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+        }
+
+        // Fractal Brownian Motion (FBM)
+        float fbm(vec2 p) {
+            float value = 0.0;
+            float amplitude = 0.5;
+            float frequency = 1.0;
+            
+            for (int i = 0; i < 5; i++) {
+                value += amplitude * noise(p * frequency);
+                p *= mat2(0.8, -0.6, 0.6, 0.8);
+                frequency *= 2.0;
+                amplitude *= 0.5;
+            }
+            return value;
+        }
+
+        // Круглые, реалистичные звезды
+        vec3 renderStars(vec2 uv) {
+            vec2 pos = uv * 250.0; // Масштаб звездного неба
+            vec2 gridId = floor(pos);
+            vec2 cellUv = fract(pos) - 0.5; // Центрируем координаты внутри ячейки
+            
+            float h = hash(gridId);
+            
+            // Оставляем только редкие звезды
+            float starMask = smoothstep(0.985, 1.0, h);
+            
+            // Делаем звезды круглыми (расстояние от центра ячейки)
+            float dist = length(cellUv);
+            float starShape = smoothstep(0.2, 0.02, dist); // Мягкий кружок
+            
+            // Мерцание
+            float twinkle = sin(u_time * 2.0 + h * 6.28) * 0.5 + 0.5;
+            
+            return vec3(starShape * starMask * (0.3 + 0.7 * twinkle));
+        }
+
+        // Сияние в виде дуги с резкими лучами
+        vec3 renderAurora(vec2 uv) {
+            vec3 col = vec3(0.0);
+            float t = u_time * 0.1;
+            
+            // Создаем эффект дуги (арки) как на фото
+            vec2 p = uv;
+            p.y -= sin(uv.x * 3.1415) * 0.35; 
+            
+            for(int i = 1; i <= 3; i++) {
+                float fi = float(i);
+                vec2 q = p * (1.5 + fi * 0.4);
+                q.x += t * (fi * 0.5);
+                
+                float n = fbm(q + t);
+                float w = fbm(q * 2.0 - n * 2.0 - t * 0.5);
+                
+                // Резкие вертикальные лучи (возводим в степень для контраста)
+                float rays = sin(q.x * 12.0 + w * 8.0) * 0.5 + 0.5;
+                rays = pow(rays, 6.0); 
+                
+                // Цвета как на картинке: Яркий зеленый и глубокий сине-фиолетовый центр
+                vec3 c = mix(
+                    vec3(0.05, 1.0, 0.35), // Неоновый зеленый
+                    vec3(0.1, 0.2, 0.8),   // Темно-синий/фиолетовый
+                    (fi - 1.0) / 2.0 + w * 0.6
+                );
+                
+                col += c * rays * w * 1.5;
+            }
+            
+            // Плавное затухание сверху и снизу
+            float mask = smoothstep(0.0, 0.5, uv.y) * smoothstep(1.0, 0.1, uv.y);
+            return col * mask * 2.5; // Усиливаем яркость
+        }
+
+        // Силуэт леса (елки) вместо гор
+        float getHorizonProfile(float x) {
+            float base = 0.28; // Линия горизонта
+            float hills = fbm(vec2(x * 2.0, 0.0)) * 0.08;
+            
+            // Высокочастотный шум для имитации крон деревьев
+            float trees = fbm(vec2(x * 60.0, 0.0));
+            trees = pow(trees, 3.0) * 0.06; // Острые пики
+            
+            return base + hills + trees;
+        }
+
+        void main() {
+            vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+            vec2 aspectUV = uv * vec2(u_resolution.x / u_resolution.y, 1.0);
+            
+            // Глубокий градиент ночного неба на весь экран
+            vec3 finalColor = mix(vec3(0.02, 0.1, 0.2), vec3(0.01, 0.01, 0.05), uv.y);
+            
+            // Добавляем звезды и сияние
+            finalColor += renderStars(aspectUV);
+            finalColor += renderAurora(aspectUV);
+
+            // Легкая виньетка по краям
+            float vignette = 1.0 - length(uv - 0.5) * 0.5;
+            finalColor *= smoothstep(0.0, 1.0, vignette);
+
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+    </script>
+
+    <script>
+        // Инициализация WebGL
+        function initWebGL() {
+            const canvas = document.getElementById('glcanvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+            if (!gl) {
+                console.error('WebGL не поддерживается вашим браузером.');
+                return;
+            }
+
+            // Шейдеры (берем текст из тегов script)
+            const vsSource = document.getElementById('vertex-shader').text;
+            const fsSource = document.getElementById('fragment-shader').text;
+
+            // Компиляция шейдера
+            function compileShader(gl, type, source) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error('Ошибка компиляции шейдера:', gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+            // Создание программы
+            const program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error('Ошибка линковки программы:', gl.getProgramInfoLog(program));
+                return;
+            }
+            gl.useProgram(program);
+
+            // Создание геометрии (два треугольника на весь экран)
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            const positions = [
+                -1.0, -1.0,
+                 1.0, -1.0,
+                -1.0,  1.0,
+                -1.0,  1.0,
+                 1.0, -1.0,
+                 1.0,  1.0,
+            ];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+            const positionLocation = gl.getAttribLocation(program, 'a_position');
+            gl.enableVertexAttribArray(positionLocation);
+            gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+            // Получение ссылок на uniform переменные
+            const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
+            const timeLocation = gl.getUniformLocation(program, 'u_time');
+            const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+
+            // Состояние мыши
+            let mouseX = 0;
+            let mouseY = 0;
+
+            // Обработка изменения размера окна
+            function resize() {
+                const pixelRatio = window.devicePixelRatio || 1;
+                canvas.width = window.innerWidth * pixelRatio;
+                canvas.height = window.innerHeight * pixelRatio;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+            }
+
+            window.addEventListener('resize', resize);
+            resize(); // Вызов при старте
+
+            // Обработка движения мыши
+            window.addEventListener('mousemove', (e) => {
+                const pixelRatio = window.devicePixelRatio || 1;
+                mouseX = e.clientX * pixelRatio;
+                // Инвертируем Y, так как в WebGL Y растет снизу вверх
+                mouseY = (window.innerHeight - e.clientY) * pixelRatio; 
+            });
+
+            // Для мобильных устройств (touch)
+            window.addEventListener('touchmove', (e) => {
+                const pixelRatio = window.devicePixelRatio || 1;
+                mouseX = e.touches[0].clientX * pixelRatio;
+                mouseY = (window.innerHeight - e.touches[0].clientY) * pixelRatio;
+            }, { passive: true });
+
+            // Главный цикл анимации
+            let startTime = Date.now();
+            function render() {
+                const currentTime = (Date.now() - startTime) * 0.001; // Время в секундах
+                
+                gl.uniform1f(timeLocation, currentTime);
+                gl.uniform2f(mouseLocation, mouseX, mouseY);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(render);
+            }
+
+            render();
+        }
+
+        // Запускаем при загрузке
+        window.onload = initWebGL;
+    </script>
+</body>
+</html>

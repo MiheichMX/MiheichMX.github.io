@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моторный Центр Истра — Капитальный ремонт ДВС Премиум Авто</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#080a11',
+                        darkcard: '#101422',
+                        darkborder: 'rgba(255, 255, 255, 0.08)',
+                        brandblue: {
+                            400: '#38bdf8',
+                            500: '#0284c7',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        },
+                        accentgold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #080a11;
+            color: #e2e8f0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Effects (like in reference) */
+        .glow-blue {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-amber {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(16, 20, 34, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(37, 99, 235, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Gradient Button like reference */
+        .btn-brand {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-brand:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Text gradient */
+        .text-gradient-white {
+            background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-blue {
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-600 selection:text-white">
+
+    <header class="sticky top-0 z-50 bg-[#080a11]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Логотип -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-11 h-11 bg-blue-600/20 border border-blue-500/40 rounded-xl flex items-center justify-center font-black text-blue-400 text-xl tracking-tighter shadow-lg shadow-blue-500/10">
+                        MC
+                    </div>
+                    <div>
+                        <span class="block text-base font-extrabold text-white tracking-wider uppercase font-sans">Моторный Центр Истра</span>
+                        <span class="block text-[11px] text-gray-400 uppercase font-semibold tracking-widest">Капремонт ДВС Премиум-Авто</span>
+                    </div>
+                </div>
+
+                <!-- Навигация -->
+                <nav class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-wider text-gray-300">
+                    <a href="#services" class="hover:text-blue-400 transition-colors">С чем приезжают</a>
+                    <a href="#quiz-block" class="hover:text-blue-400 transition-colors">Калькулятор</a>
+                    <a href="#trust" class="hover:text-blue-400 transition-colors">Гарантии</a>
+                    <a href="#contacts" class="hover:text-blue-400 transition-colors">Контакты</a>
+                </nav>
+
+                <!-- Контакты и WhatsApp -->
+                <div class="flex items-center space-x-4">
+                    <div class="text-right hidden sm:block">
+                        <span class="block text-[10px] text-gray-500 font-bold uppercase tracking-widest">Прием моториста</span>
+                        <a href="tel:+74950000000" class="text-base font-extrabold text-white hover:text-blue-400 transition-colors tracking-tight">+7 (495) 000-00-00</a>
+                    </div>
+                    <a href="https://wa.me/74950000000" target="_blank" class="bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 text-emerald-400 px-4 py-2.5 rounded-xl flex items-center space-x-2 text-xs font-bold transition-all">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.725 1.451 5.405.002 9.801-4.394 9.804-9.805.002-2.621-1.02-5.086-2.88-6.949-1.861-1.863-4.329-2.885-6.953-2.887-5.409 0-9.81 4.401-9.814 9.813-.001 1.637.432 3.237 1.251 4.654l-.993 3.63 3.731-.978zm10.155-5.922c-.287-.144-1.697-.838-1.959-.933-.263-.096-.454-.144-.645.144-.191.287-.74.933-.907 1.124-.167.191-.334.215-.621.071-.287-.144-1.211-.447-2.308-1.427-.854-.761-1.43-1.702-1.597-1.989-.167-.287-.018-.442.126-.584.13-.128.287-.335.431-.502.144-.167.191-.287.287-.478.096-.191.048-.359-.024-.502-.072-.143-.645-1.554-.885-2.128-.233-.561-.471-.485-.645-.494-.167-.008-.359-.01-.55-.01s-.502.072-.765.359c-.263.287-1.004.981-1.004 2.392 0 1.411 1.028 2.774 1.171 2.965.144.191 2.024 3.09 4.904 4.33.685.295 1.22.471 1.637.603.689.219 1.317.189 1.812.115.552-.083 1.697-.693 1.936-1.363.239-.67.239-1.243.167-1.363-.072-.12-.263-.215-.55-.359z"/></svg>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden border-b border-white/5">
+        <div class="glow-blue -top-20 left-1/2 -translate-x-1/2"></div>
+        <div class="glow-amber top-1/3 -right-20"></div>
+
+        <!-- Фоновое изображение крутого внедорожника (твоя генерация) -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <!-- Градиенты для плавного растворения краев картинки в фоне сайта -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#080a11] via-transparent to-[#080a11] z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-[#080a11] via-transparent to-[#080a11] z-10"></div>
+            <!-- Сюда подтянется твоя сгенерированная картинка hero-suv.jpg -->
+            <img src="images-tehservis/hero-suv.jpg" onerror="this.style.display='none';" alt="Премиум авто" class="w-full h-full object-cover object-center opacity-70 mix-blend-lighten">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+                
+                <div class="inline-flex items-center space-x-3 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full backdrop-blur-md">
+                    <span class="w-2 h-2 bg-blue-400 rounded-full animate-ping"></span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-blue-300">Специализированный сервис в черте г. Истра</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-none text-gradient-white">
+                    Капитальный ремонт <br><span class="text-gradient-blue">двигателей</span> премиум-авто
+                </h1>
+
+                <p class="text-base sm:text-xl text-gray-400 font-normal max-w-2xl mx-auto leading-relaxed">
+                    Гильзовка и ремонт ДВС с гарантией 1 год. Устраняем задиры, провернутые вкладыши и обрывы цепей ГРМ. Организуем доставку авто в сервис <strong class="text-white font-semibold">(БЕСПЛАТНО при ремонте)</strong>.
+                </p>
+
+                <!-- Кнопки действия как в референсе -->
+                <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#quiz-block" class="w-full sm:w-auto btn-brand text-white font-extrabold text-sm uppercase tracking-wider px-8 py-4 rounded-xl flex items-center justify-center space-x-3">
+                        <span>Рассчитать смету ремонта</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="#services" class="w-full sm:w-auto btn-outline text-gray-300 font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-xl flex items-center justify-center">
+                        Болячки моторов
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Главное авто в стиле референса (с подложкой изображения) -->
+            <div class="mt-12 relative max-w-5xl mx-auto">
+                <div class="aspect-[16/8] sm:aspect-[21/9] rounded-2xl overflow-hidden glass-card border border-white/10 relative group">
+                    <img src="images-tehservis/hero-bg.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1200&auto=format&fit=crop';" alt="Премиум автосервис Истра" class="w-full h-full object-cover object-center filter opacity-60 group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#080a11] via-[#080a11]/40 to-transparent"></div>
+                    
+                    <!-- Плашки марок прямо поверх фонового авто -->
+                    <div class="absolute bottom-6 inset-x-6 flex flex-wrap justify-center gap-2 md:gap-3">
+                        <span class="bg-[#080a11]/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-200">Land Rover</span>
+                        <span class="bg-[#080a11]/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-200">Jaguar</span>
+                        <span class="bg-[#080a11]/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-200">BMW / Mini</span>
+                        <span class="bg-[#080a11]/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-200">Mercedes-Benz</span>
+                        <span class="bg-[#080a11]/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-200">Porsche</span>
+                        <span class="bg-[#080a11]/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-200">Toyota / Lexus</span>
+                    </div>
+                </div>
+
+                <!-- Боковые плашки со статистикой (как на референсе) -->
+                <div class="hidden lg:block absolute -left-8 top-1/2 -translate-y-1/2 glass-card p-4 rounded-2xl max-w-[200px] text-left border border-white/10">
+                    <div class="text-blue-400 font-black text-2xl tracking-tight">10+ Лет</div>
+                    <div class="text-[11px] text-gray-400 font-semibold uppercase leading-tight mt-1">Опыта узкой работы с премиальными ДВС</div>
+                </div>
+
+                <div class="hidden lg:block absolute -right-8 top-1/2 -translate-y-1/2 glass-card p-4 rounded-2xl max-w-[200px] text-left border border-white/10">
+                    <div class="text-emerald-400 font-black text-2xl tracking-tight">1 Год</div>
+                    <div class="text-[11px] text-gray-400 font-semibold uppercase leading-tight mt-1">Гарантии без ограничения пробега</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 -mt-10 mb-24 relative z-20" id="quiz-block">
+        <div class="glass-card rounded-3xl p-6 sm:p-10 border border-blue-500/20 shadow-2xl relative overflow-hidden">
+            <div class="glow-blue -top-20 -right-20"></div>
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/10 pb-6 mb-8 gap-4 relative z-10">
+                <div>
+                    <h2 class="text-2xl font-black uppercase text-white tracking-wide">Калькулятор предварительной сметы</h2>
+                    <p class="text-xs text-gray-400 font-medium mt-1">Ответьте на 3 вопроса и получите точный расчет работ в WhatsApp</p>
+                </div>
+                <div class="bg-blue-600/20 border border-blue-500/30 text-blue-300 px-4 py-1.5 rounded-full text-xs font-extrabold tracking-widest uppercase inline-block self-start" id="quiz-progress-badge">
+                    Шаг 1 из 3
+                </div>
+            </div>
+
+            <!-- ШАГ 1: МАРКА -->
+            <div class="quiz-step block relative z-10" id="step1">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-300 mb-6">1. Выберите марку вашего автомобиля:</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                    
+                    <div class="glass-card glass-card-hover rounded-2xl p-5 text-center cursor-pointer border border-white/10 group" onclick="selectQuizOption(this, 'brand', 'Land Rover / Jaguar')">
+                        <span class="block text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors">Land Rover / Jaguar</span>
+                        <span class="text-[10px] text-gray-400 block mt-1">2.7, 3.0, 5.0, Ingenium</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-5 text-center cursor-pointer border border-white/10 group" onclick="selectQuizOption(this, 'brand', 'BMW / Mini')">
+                        <span class="block text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors">BMW / Mini</span>
+                        <span class="text-[10px] text-gray-400 block mt-1">N63, S63, N20, B48</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-5 text-center cursor-pointer border border-white/10 group" onclick="selectQuizOption(this, 'brand', 'Mercedes-Benz')">
+                        <span class="block text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors">Mercedes-Benz</span>
+                        <span class="text-[10px] text-gray-400 block mt-1">M278, M157, M274</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-5 text-center cursor-pointer border border-white/10 group" onclick="selectQuizOption(this, 'brand', 'Porsche / VAG')">
+                        <span class="block text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors">Porsche / VAG</span>
+                        <span class="text-[10px] text-gray-400 block mt-1">Cayenne, Macan, Panamera</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-5 text-center cursor-pointer border border-white/10 group" onclick="selectQuizOption(this, 'brand', 'Toyota / Lexus')">
+                        <span class="block text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors">Toyota / Lexus</span>
+                        <span class="text-[10px] text-gray-400 block mt-1">LC200, LX450d (4.5 V8)</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-5 text-center cursor-pointer border border-white/10 group" onclick="selectQuizOption(this, 'brand', 'Другая марка')">
+                        <span class="block text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors">Другая марка ДВС</span>
+                        <span class="text-[10px] text-gray-400 block mt-1">Уточнить у моториста</span>
+                    </div>
+
+                </div>
+                <div class="flex justify-end pt-4 border-t border-white/10">
+                    <button class="btn-brand text-white font-bold py-3.5 px-8 rounded-xl text-xs uppercase tracking-wider flex items-center" onclick="nextQuizStep(1)">
+                        Далее
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ШАГ 2: СИМПТОМЫ -->
+            <div class="quiz-step hidden relative z-10" id="step2">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-300 mb-6">2. Какие симптомы поломки наблюдаются?</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex items-center cursor-pointer border border-white/10" onclick="selectQuizOption(this, 'problem', 'Стук в моторе / Подозрение на вкладыши')">
+                        <span class="text-xs font-bold text-gray-200">Глухой металлический стук в моторе</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex items-center cursor-pointer border border-white/10" onclick="selectQuizOption(this, 'problem', 'Мотор заклинил / Не крутит стартер')">
+                        <span class="text-xs font-bold text-gray-200">Двигатель заклинил / Не прокручивается</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex items-center cursor-pointer border border-white/10" onclick="selectQuizOption(this, 'problem', 'Задиры в цилиндрах / Жор масла / Дым')">
+                        <span class="text-xs font-bold text-gray-200">Жор масла / Задиры / Дымит выхлоп</span>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex items-center cursor-pointer border border-white/10" onclick="selectQuizOption(this, 'problem', 'Шум цепи ГРМ / Замена ГРМ')">
+                        <span class="text-xs font-bold text-gray-200">Гремит цепь ГРМ / Замена цепей</span>
+                    </div>
+
+                </div>
+                <div class="flex justify-between pt-4 border-t border-white/10">
+                    <button class="btn-outline text-gray-400 font-bold py-3 px-5 rounded-xl text-xs uppercase" onclick="prevQuizStep(2)">
+                        ← Назад
+                    </button>
+                    <button class="btn-brand text-white font-bold py-3 px-8 rounded-xl text-xs uppercase" onclick="nextQuizStep(2)">
+                        Далее →
+                    </button>
+                </div>
+            </div>
+
+            <!-- ШАГ 3: КОНТАКТЫ -->
+            <div class="quiz-step hidden relative z-10" id="step3">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-300 mb-2">3. Куда прислать предварительный расчет сметы?</h3>
+                <p class="text-xs text-gray-400 mb-6">Моторист изучит симптомы вашей марки и свяжется с вами в течение 15 минут в WhatsApp.</p>
+                
+                <div class="space-y-4 max-w-md mx-auto mb-8">
+                    <div>
+                        <label for="client-phone" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Номер телефона для связи</label>
+                        <input type="tel" id="client-phone" placeholder="+7 (999) 000-00-00" class="w-full bg-[#080a11] border border-white/20 rounded-xl px-5 py-3.5 font-semibold text-white focus:border-blue-500 focus:outline-none transition-all">
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-4 border-t border-white/10">
+                    <button class="btn-outline text-gray-400 font-bold py-3 px-5 rounded-xl text-xs uppercase" onclick="prevQuizStep(3)">
+                        ← Назад
+                    </button>
+                    <button class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 px-8 rounded-xl transition-all text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20" onclick="submitQuizData()">
+                        Получить расчет в WhatsApp
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-white/5" id="services">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-blue-400 font-extrabold uppercase tracking-widest text-xs">С чем к нам приезжают</span>
+            <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mt-2">Типовые неисправности и их решение</h2>
+            <p class="text-gray-400 mt-4 leading-relaxed text-sm">Знаем все заводские болячки премиальных двигателей. Не просто перебираем запчасти, а модернизируем узлы.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Карточка JLR 2.7 / 3.0 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="aspect-video rounded-xl overflow-hidden mb-4 border border-white/10 bg-gray-900">
+                        <img src="images-tehservis/jlr-30.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600&auto=format&fit=crop';" alt="JLR 3.0 TDV6" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-blue-500/20 border border-blue-500/30 text-blue-300 font-bold px-3 py-1 rounded-lg text-[10px] uppercase">Land Rover / Jaguar</span>
+                        <span class="text-[10px] text-gray-400 font-bold">2.7 & 3.0 TDV6 / SDV6</span>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Проворот вкладышей и поломка коленвала</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Из-за масляного голодания или разжижения топлива вал заклинивает, проворачивает вкладыши и ломает коленвал пополам.</p>
+                </div>
+                <div class="bg-[#080a11]/80 p-3.5 rounded-xl border border-white/5 text-xs text-gray-300">
+                    <strong class="block text-blue-400 font-bold mb-1">Решение:</strong>
+                    Установка коленвала, ремонт постели блока, замковые вкладыши и модернизированный маслонасос.
+                </div>
+            </div>
+
+            <!-- Карточка JLR 5.0 V8 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="aspect-video rounded-xl overflow-hidden mb-4 border border-white/10 bg-gray-900">
+                        <img src="images-tehservis/jlr-50.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=600&auto=format&fit=crop';" alt="JLR 5.0 Supercharged" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-blue-500/20 border border-blue-500/30 text-blue-300 font-bold px-3 py-1 rounded-lg text-[10px] uppercase">Land Rover / Jaguar</span>
+                        <span class="text-[10px] text-gray-400 font-bold">5.0 V8 Supercharged</span>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Растяжение цепей ГРМ и носок компрессора</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Натяжители изнашиваются, цепь начинает греметь. При перескоке гнет клапана. В компрессоре изнашивается изолирующий носок.</p>
+                </div>
+                <div class="bg-[#080a11]/80 p-3.5 rounded-xl border border-white/5 text-xs text-gray-300">
+                    <strong class="block text-blue-400 font-bold mb-1">Решение:</strong>
+                    Замена ГРМ комплектом последнего поколения, ревизия муфт VVT и нагнетателя.
+                </div>
+            </div>
+
+            <!-- Карточка JLR Ingenium 2.0 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="aspect-video rounded-xl overflow-hidden mb-4 border border-white/10 bg-gray-900">
+                        <img src="images-tehservis/jlr-20.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=600&auto=format&fit=crop';" alt="Ingenium 2.0" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-blue-500/20 border border-blue-500/30 text-blue-300 font-bold px-3 py-1 rounded-lg text-[10px] uppercase">Land Rover / Jaguar</span>
+                        <span class="text-[10px] text-gray-400 font-bold">2.0 Ingenium (Дизель/Бензин)</span>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Обрыв цепи ГРМ (цепь сзади со стороны КПП)</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Цепи вытягиваются уже на 70–90 тыс. км. Появляется гул балансирных валов. Требуется демонтаж мотора для замены.</p>
+                </div>
+                <div class="bg-[#080a11]/80 p-3.5 rounded-xl border border-white/5 text-xs text-gray-300">
+                    <strong class="block text-blue-400 font-bold mb-1">Решение:</strong>
+                    Замена привода ГРМ со съемом ДВС/КПП, замена балансирных валов и турбин.
+                </div>
+            </div>
+
+            <!-- Карточка BMW N63 / S63 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="aspect-video rounded-xl overflow-hidden mb-4 border border-white/10 bg-gray-900">
+                        <img src="images-tehservis/bmw-n63.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=600&auto=format&fit=crop';" alt="BMW N63" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-sky-500/20 border border-sky-500/30 text-sky-300 font-bold px-3 py-1 rounded-lg text-[10px] uppercase">BMW / Mini</span>
+                        <span class="text-[10px] text-gray-400 font-bold">4.4 V8 N63 / S63</span>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Жор масла, перегрев и проворот вкладышей</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Горячий развал блока разрушает маслосъемные колпачки. Начинается сильный расход масла и износ поршневой группы.</p>
+                </div>
+                <div class="bg-[#080a11]/80 p-3.5 rounded-xl border border-white/5 text-xs text-gray-300">
+                    <strong class="block text-sky-400 font-bold mb-1">Решение:</strong>
+                    Капитальный ремонт, гильзовка блока, замена колпачков, установка «холодного» термостата.
+                </div>
+            </div>
+
+            <!-- Карточка Mercedes M278 / M157 -->
+            <div class="glass-card glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="aspect-video rounded-xl overflow-hidden mb-4 border border-white/10 bg-gray-900">
+                        <img src="images-tehservis/mb-m278.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=600&auto=format&fit=crop';" alt="Mercedes M278" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-slate-500/20 border border-slate-500/30 text-slate-300 font-bold px-3 py-1 rounded-lg text-[10px] uppercase">Mercedes-Benz</span>
+                        <span class="text-[10px] text-gray-400 font-bold">V8 BiTurbo M278 / M157</span>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Задиры в цилиндрах и стук фазорегуляторов</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Разрушается алюсиловое покрытие стенок цилиндров, мотор начинает стучать. Изнашиваются импульсные диски и муфты.</p>
+                </div>
+                <div class="bg-[#080a11]/80 p-3.5 rounded-xl border border-white/5 text-xs text-gray-300">
+                    <strong class="block text-slate-300 font-bold mb-1">Решение:</strong>
+                    Качественная гильзовка чугунными гильзами, новые поршни, замена муфт распредвалов.
+                </div>
+            </div>
+
+            <!-- Карточка Toyota 1VD-FTV -->
+            <div class="glass-card glass-card-hover rounded-2xl p-6 border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="aspect-video rounded-xl overflow-hidden mb-4 border border-white/10 bg-gray-900">
+                        <img src="images-tehservis/toyota-1vd.jpg" onerror="this.onerror=null; this.src='https://images-tehservis.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=600&auto=format&fit=crop';" alt="Toyota 1VD" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-red-500/20 border border-red-500/30 text-red-300 font-bold px-3 py-1 rounded-lg text-[10px] uppercase">Toyota / Lexus</span>
+                        <span class="text-[10px] text-gray-400 font-bold">4.5 V8 D-4D (LC200 / LX450d)</span>
+                    </div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Прогар поршней и трещины коленвала</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed mb-4">Перелив форсунок и забитый ЕГР приводят к перегреву поршня, прогару и образованию глубоких задиров в цилиндре.</p>
+                </div>
+                <div class="bg-[#080a11]/80 p-3.5 rounded-xl border border-white/5 text-xs text-gray-300">
+                    <strong class="block text-red-400 font-bold mb-1">Решение:</strong>
+                    Расточка/гильзовка блока, замена поршневой группы, проверка форсунок на стенде.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-20 border-y border-white/5 bg-[#0a0d16] relative overflow-hidden" id="trust">
+        <div class="glow-blue top-1/2 left-0 -translate-y-1/2"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-400 font-extrabold uppercase tracking-widest text-xs">Почему нам доверяют</span>
+                <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mt-2">Прозрачный процесс ремонта без сюрпризов</h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="glass-card p-6 rounded-2xl border border-white/10">
+                    <div class="w-10 h-10 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-xl flex items-center justify-center font-black mb-4">1</div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Дефектовка при вас</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">Вы можете лично присутствовать при разборке мотора или получать фото/видеоотчеты в WhatsApp.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-white/10">
+                    <div class="w-10 h-10 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-xl flex items-center justify-center font-black mb-4">2</div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Фиксация в Договоре</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">После дефектовки формируем смету. Итоговая стоимость фиксируется в договоре и не меняется.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-white/10">
+                    <div class="w-10 h-10 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-xl flex items-center justify-center font-black mb-4">3</div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Усиленные детали</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">Используем замковые вкладыши, модернизированные маслонасосы и цепи последнего поколения.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl border border-white/10">
+                    <div class="w-10 h-10 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-xl flex items-center justify-center font-black mb-4">4</div>
+                    <h4 class="font-extrabold text-white text-base mb-2">Гарантия 1 год</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">Даем официальную гарантию 1 год без ограничения по пробегу на выполненные работы и запчасти.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#05060b] text-white pt-16 pb-8 border-t border-white/5" id="contacts">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+                
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-9 h-9 bg-blue-600/20 border border-blue-500/40 rounded-lg flex items-center justify-center font-black text-blue-400 text-base">MC</div>
+                        <span class="text-base font-black tracking-wider uppercase">Моторный Центр Истра</span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Специализированный техцентр по ремонту и гильзовке двигателей автомобилей Land Rover, Jaguar, BMW, Mercedes-Benz, Porsche и Toyota в Истринском районе.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-4">Наш адрес в Истре</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Московская область, г. Истра, ул. Московская, д. 00042<br>
+                        Удобный заезд с Новой Риги и Волоколамского шоссе.<br>
+                        <strong class="text-white block mt-2">Режим работы: Ежедневно 9:00 - 21:00</strong>
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-blue-400 mb-4">Связь с мотористом</h4>
+                    <p class="text-xs text-gray-400 mb-3">Телефон: <strong class="text-white text-sm">+7 (495) 000-00-00</strong></p>
+                    <a href="https://wa.me/74950000000" target="_blank" class="inline-flex items-center space-x-2 bg-emerald-500/20 border border-emerald-500/40 hover:bg-emerald-500/30 text-emerald-400 px-4 py-2.5 rounded-xl text-xs font-bold transition-all">
+                        <span>Написать в WhatsApp мотористу</span>
+                    </a>
+                </div>
+
+            </div>
+
+            <hr class="border-white/5 my-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-gray-600 gap-4">
+                <span>© 2026 Моторный Центр Истра. Все права защищены.</span>
+                <span>Информация не является публичной офертой.</span>
+            </div>
+        </div>
+    </footer>
+
+    <div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300">
+        <div class="glass-card rounded-3xl max-w-md w-full p-8 text-center relative border border-blue-500/30 shadow-2xl scale-95 transition-transform duration-300 transform" id="modal-card">
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-emerald-500/30">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            
+            <h3 class="text-2xl font-black uppercase text-white tracking-wide mb-2">Заявка принята!</h3>
+            <p class="text-xs text-gray-400 leading-relaxed mb-6">Главный моторист изучит указанную проблему и свяжется с вами в течение 10-15 минут в WhatsApp.</p>
+            
+            <button onclick="closeSuccessModal()" class="w-full btn-brand text-white font-bold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider">
+                Понятно, жду ответа
+            </button>
+        </div>
+    </div>
+
+    <div id="validation-toast" class="fixed bottom-5 right-5 bg-red-600/90 backdrop-blur-md text-white px-5 py-4 rounded-2xl shadow-2xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-3 max-w-sm border border-red-500/30">
+        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        <span class="text-xs font-bold" id="validation-msg">Пожалуйста, выберите нужную опцию!</span>
+    </div>
+
+    <script>
+        const quizResults = {
+            brand: '',
+            problem: '',
+            phone: ''
+        };
+
+        function selectQuizOption(element, category, value) {
+            const siblingCards = element.parentElement.querySelectorAll('.glass-card');
+            siblingCards.forEach(card => {
+                card.classList.remove('border-blue-500', 'bg-blue-500/10');
+                card.classList.add('border-white/10');
+            });
+
+            element.classList.remove('border-white/10');
+            element.classList.add('border-blue-500', 'bg-blue-500/10');
+            quizResults[category] = value;
+        }
+
+        function nextQuizStep(currentStep) {
+            if (currentStep === 1 && !quizResults.brand) {
+                showToast('Пожалуйста, выберите марку вашего автомобиля.');
+                return;
+            }
+            if (currentStep === 2 && !quizResults.problem) {
+                showToast('Пожалуйста, укажите характерные симптомы.');
+                return;
+            }
+
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            document.getElementById(`step${currentStep}`).classList.remove('block');
+            
+            document.getElementById(`step${currentStep + 1}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep + 1}`).classList.add('block');
+
+            document.getElementById('quiz-progress-badge').innerText = `Шаг ${currentStep + 1} из 3`;
+        }
+
+        function prevQuizStep(currentStep) {
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            document.getElementById(`step${currentStep}`).classList.remove('block');
+            
+            document.getElementById(`step${currentStep - 1}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep - 1}`).classList.add('block');
+
+            document.getElementById('quiz-progress-badge').innerText = `Шаг ${currentStep - 1} из 3`;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('validation-toast');
+            document.getElementById('validation-msg').innerText = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function submitQuizData() {
+            const phoneField = document.getElementById('client-phone');
+            if (!phoneField.value.trim() || phoneField.value.trim().length < 7) {
+                showToast('Пожалуйста, введите корректный номер телефона.');
+                return;
+            }
+
+            quizResults.phone = phoneField.value;
+            console.log('Сформирован лид из Истры (Dubrovskiy Style):', quizResults);
+
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                document.getElementById('modal-card').classList.remove('scale-95');
+                document.getElementById('modal-card').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            document.getElementById('modal-card').classList.remove('scale-100');
+            document.getElementById('modal-card').classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 200);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEBULA — Креативное агентство</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,600&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        graphite: '#0b0b0c',
+                        milk: '#f2f0eb',
+                        'milk-muted': 'rgba(242, 240, 235, 0.6)',
+                        'milk-border': 'rgba(242, 240, 235, 0.12)',
+                    },
+                    fontFamily: {
+                        sans: ['Onest', 'sans-serif'],
+                        heading: ['Unbounded', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+        
+        body {
+            background-color: #0b0b0c;
+            color: #f2f0eb;
+            font-family: 'Onest', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom cursor */
+        }
+
+        /* Canvas positions */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Film Grain Overlay */
+        .film-grain {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 5;
+            animation: grain 0.5s steps(1) infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            30% { transform: translate(3%, -8%); }
+            50% { transform: translate(-4%, 5%); }
+            70% { transform: translate(7%, 2%); }
+            90% { transform: translate(-3%, 8%); }
+        }
+
+        /* Custom Cursor Elements */
+        #cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background-color: #f2f0eb;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(242, 240, 235, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+        }
+
+        #cursor-ring.hovered {
+            width: 72px;
+            height: 72px;
+            background-color: rgba(242, 240, 235, 0.1);
+            border-color: #f2f0eb;
+        }
+
+        /* Letter Reveal Animation */
+        .char-reveal {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(110%) rotate(4deg);
+            filter: blur(12px);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .char-reveal.active {
+            opacity: 1;
+            transform: translateY(0) rotate(0deg);
+            filter: blur(0px);
+        }
+
+        /* Glassmorphism Header */
+        .glass-header {
+            background: rgba(11, 11, 12, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(242, 240, 235, 0.08);
+        }
+
+        /* Ticker Animation */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-ticker {
+            display: inline-flex;
+            white-space: nowrap;
+            animation: ticker 35s linear infinite;
+        }
+
+        .animate-ticker:hover {
+            animation-play-state: paused;
+        }
+
+        /* 3D Card Hover Perspective Container */
+        .perspective-container {
+            perspective: 1000px;
+        }
+
+        .card-tilt {
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, background-color 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-tilt:hover {
+            border-color: rgba(242, 240, 235, 0.5);
+            background-color: rgba(242, 240, 235, 0.03);
+        }
+
+        /* Magnet Button Base */
+        .btn-magnetic {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reduced Motion Fallbacks */
+        @media (prefers-reduced-motion: reduce) {
+            .char-reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+            }
+            .animate-ticker {
+                animation: none !important;
+            }
+            .film-grain {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen selection:bg-milk selection:text-graphite">
+
+    <canvas id="webgl-canvas"></canvas>
+    <div class="film-grain"></div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <header class="fixed top-0 left-0 w-full z-40 glass-header px-6 lg:px-16 py-5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="btn-magnetic group flex items-center gap-2">
+                <span class="font-heading font-black text-2xl tracking-tighter text-milk group-hover:opacity-80 transition-opacity">NEBULA</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-milk animate-pulse"></span>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-10 text-sm tracking-wider uppercase font-medium">
+                <a href="#works" class="hover:text-milk text-milk-muted transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-milk hover:after:w-full after:transition-all">Кейсы</a>
+                <a href="#studio" class="hover:text-milk text-milk-muted transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-milk hover:after:w-full after:transition-all">Агентство</a>
+                <a href="#contacts" class="hover:text-milk text-milk-muted transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-milk hover:after:w-full after:transition-all">Связь</a>
+            </nav>
+
+            <!-- CTA Header Button -->
+            <a href="#contacts" class="btn-magnetic px-6 py-2.5 rounded-full bg-milk text-graphite font-medium text-sm hover:bg-opacity-90 transition-all shadow-lg hover:shadow-milk/10">
+                Начать проект
+            </a>
+        </div>
+    </header>
+     
+            <section class="relative min-h-screen flex flex-col justify-between pt-36 pb-12 px-6 lg:px-16 z-10">
+        <div class="max-w-7xl mx-auto w-full my-auto">
+            <!-- Headline -->
+            <h1 id="hero-title" class="font-heading font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight uppercase leading-[1.05] mb-8 flex flex-wrap gap-x-4 gap-y-2">
+                <span class="inline-flex whitespace-nowrap">Бренды,</span>
+                <span class="inline-flex whitespace-nowrap">которые</span>
+                <span class="inline-flex whitespace-nowrap font-serif italic font-normal lowercase tracking-normal text-milk/95 pr-2">оживают</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="max-w-xl text-lg sm:text-xl text-milk-muted font-light leading-relaxed mb-12">
+                Мы стираем грань между искусством и технологиями. Создаем смелые цифровые миры, которые захватывают внимание с первой секунды.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap items-center gap-5">
+                <a href="#works" class="btn-magnetic group px-8 py-4 rounded-full bg-milk text-graphite font-semibold text-base flex items-center gap-3 hover:bg-opacity-90 transition-all">
+                    <span>Смотреть шоурил</span>
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                <a href="#contacts" class="btn-magnetic px-8 py-4 rounded-full border border-milk-border text-milk font-semibold text-base hover:border-milk hover:bg-milk/5 transition-all">
+                    Бриф
+                </a>
+            </div>
+        </div>
+
+        <div class="w-full overflow-hidden border-t border-b border-milk-border py-4 mt-16">
+            <div class="animate-ticker flex items-center gap-12 text-sm uppercase tracking-widest text-milk-muted font-medium">
+                <span>ART DIRECTION</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>WEBGL EXPERIENCES</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>BRAND IDENTITY</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>CREATIVE CODING</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>MOTION DESIGN</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <!-- Duplicate for seamless loop -->
+                <span>ART DIRECTION</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>WEBGL EXPERIENCES</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>BRAND IDENTITY</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>CREATIVE CODING</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+                <span>MOTION DESIGN</span>
+                <span class="w-1 h-1 rounded-full bg-milk-border"></span>
+            </div>
+        </div>
+    </section>
+
+    <section id="works" class="relative z-10 py-32 px-6 lg:px-16 border-t border-milk-border">
+        <div class="max-w-7xl mx-auto">
+            <!-- Section Title -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-milk-muted font-semibold block mb-3">// Экспертиза</span>
+                    <h2 class="font-heading font-bold text-3xl sm:text-5xl uppercase tracking-tight">Вектор развития</h2>
+                </div>
+                <p class="max-w-md text-milk-muted text-sm leading-relaxed">
+                    Наш подход базируется на исследованиях, смелых визуальных концепциях и безупречной технической реализации.
+                </p>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-container">
+                <!-- Card 1 -->
+                <div class="card-tilt p-8 sm:p-10 rounded-2xl border border-milk-border bg-graphite/40 backdrop-blur-sm flex flex-col justify-between min-h-[420px]">
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <span class="font-heading text-xs font-bold tracking-widest text-milk-muted">01</span>
+                            <span class="w-8 h-8 rounded-full border border-milk-border flex items-center justify-center text-xs">↗</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl uppercase mb-4">Digital-стратегия</h3>
+                        <p class="text-milk-muted text-sm leading-relaxed">
+                            Аналитика, позиционирование и разработка архитектуры взаимодействия пользователя с вашим брендом в цифровой среде.
+                        </p>
+                    </div>
+                    <div class="pt-8 border-t border-milk-border/50 flex flex-wrap gap-2">
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">Аналитика</span>
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">CJM</span>
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">UX</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card-tilt p-8 sm:p-10 rounded-2xl border border-milk-border bg-graphite/40 backdrop-blur-sm flex flex-col justify-between min-h-[420px]">
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <span class="font-heading text-xs font-bold tracking-widest text-milk-muted">02</span>
+                            <span class="w-8 h-8 rounded-full border border-milk-border flex items-center justify-center text-xs">↗</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl uppercase mb-4">Immersive Web</h3>
+                        <p class="text-milk-muted text-sm leading-relaxed">
+                            Создание вау-эффекта с помощью 3D-графики, интерактивных шейдеров и нестандартного фронтенда.
+                        </p>
+                    </div>
+                    <div class="pt-8 border-t border-milk-border/50 flex flex-wrap gap-2">
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">Three.js</span>
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">Шейдеры</span>
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">Анимация</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card-tilt p-8 sm:p-10 rounded-2xl border border-milk-border bg-graphite/40 backdrop-blur-sm flex flex-col justify-between min-h-[420px]">
+                    <div>
+                        <div class="flex justify-between items-start mb-8">
+                            <span class="font-heading text-xs font-bold tracking-widest text-milk-muted">03</span>
+                            <span class="w-8 h-8 rounded-full border border-milk-border flex items-center justify-center text-xs">↗</span>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl uppercase mb-4">Креатив</h3>
+                        <p class="text-milk-muted text-sm leading-relaxed">
+                            Арт-дирекшн, создание визуальных концепций, 3D-моделирование и генеративный дизайн для ваших проектов.
+                        </p>
+                    </div>
+                    <div class="pt-8 border-t border-milk-border/50 flex flex-wrap gap-2">
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">Концепты</span>
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">3D</span>
+                        <span class="text-[11px] uppercase tracking-wider px-3 py-1 rounded-full border border-milk-border text-milk-muted">Айдентика</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacts" class="relative z-10 border-t border-milk-border py-20 px-6 lg:px-16 bg-graphite/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+            <div>
+                <span class="font-heading font-black text-3xl tracking-tighter text-milk block mb-2">NEBULA</span>
+                <p class="text-milk-muted text-sm">© 2026 NEBULA Creative Agency.</p>
+            </div>
+            <div class="flex flex-wrap gap-8 text-sm uppercase tracking-wider text-milk-muted">
+                <a href="#" class="hover:text-milk transition-colors">Telegram</a>
+                <a href="#" class="hover:text-milk transition-colors">Behance</a>
+                <a href="#" class="hover:text-milk transition-colors">Awwwards</a>
+                <a href="mailto:hello@nebula.design" class="hover:text-milk transition-colors">hello@nebula.design</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ------------------------------------------------------------------
+           1. WebGL Liquid Shader Engine (Silk/Liquid Metal Simulation)
+           ------------------------------------------------------------------ */
+        const canvas = document.getElementById('webgl-canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+        if (!gl) {
+            console.warn('WebGL not supported, falling back to static CSS background.');
+        }
+
+        // Vertex Shader Program
+        const vsSource = `
+            attribute vec2 a_position;
+            varying vec2 v_uv;
+            void main() {
+                v_uv = a_position * 0.5 + 0.5;
+                v_uv.y = 1.0 - v_uv.y;
+                gl_Position = vec4(a_position, 0.0, 1.0);
+            }
+        `;
+
+        // Fragment Shader Program
+        const fsSource = `
+            precision highp float;
+
+            varying vec2 v_uv;
+
+            uniform vec2 u_resolution;
+            uniform float u_time;
+            uniform vec2 u_cursor;
+            uniform vec2 u_cursor_vel;
+            uniform vec4 u_ripples[8];
+            uniform int u_ripple_count;
+
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+            float snoise(vec2 v) {
+                const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                                 -0.577350269189626, 0.024390243902439);
+                vec2 i  = floor(v + dot(v, C.yy) );
+                vec2 x0 = v -   i + dot(i, C.xx);
+                vec2 i1;
+                i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                vec4 x12 = x0.xyxy + C.xxzz;
+                x12.xy -= i1;
+                i = mod289(i);
+                vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                    + i.x + vec3(0.0, i1.x, 1.0 ));
+                vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                m = m*m ;
+                m = m*m ;
+                vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                vec3 h = abs(x) - 0.5;
+                vec3 ox = floor(x + 0.5);
+                vec3 a0 = x - ox;
+                m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+                vec3 g;
+                g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                return 130.0 * dot(m, g);
+            }
+
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                float frequency = 1.0;
+                for (int i = 0; i < 4; i++) {
+                    value += amplitude * snoise(p * frequency);
+                    frequency *= 2.05;
+                    amplitude *= 0.48;
+                }
+                return value;
+            }
+
+            float getHeight(vec2 p) {
+                vec2 st = p;
+                float t = u_time * 0.15;
+                
+                vec2 q = vec2(0.0);
+                q.x = fbm(st + vec2(0.0, t));
+                q.y = fbm(st + vec2(1.0, t));
+
+                vec2 r = vec2(0.0);
+                r.x = fbm(st + 1.0 * q + vec2(1.7, 9.2) + 0.15 * t);
+                r.y = fbm(st + 1.0 * q + vec2(8.3, 2.8) + 0.12 * t);
+
+                float h = fbm(st + 2.0 * r);
+
+                vec2 curPos = u_cursor / u_resolution;
+                curPos.y = 1.0 - curPos.y;
+                float distToCursor = distance(p, curPos);
+                
+                float cursorLens = exp(-distToCursor * 12.0) * 0.35;
+                h += cursorLens;
+
+                for (int i = 0; i < 8; i++) {
+                    if (i >= u_ripple_count) break;
+                    vec2 rCenter = u_ripples[i].xy / u_resolution;
+                    rCenter.y = 1.0 - rCenter.y;
+                    float rAge = u_time - u_ripples[i].z;
+                    if (rAge > 0.0 && rAge < 2.5) {
+                        float rDist = distance(p, rCenter);
+                        float waveSpeed = 0.6;
+                        float waveFront = rAge * waveSpeed;
+                        float waveWidth = 0.08;
+                        float d = abs(rDist - waveFront);
+                        if (d < waveWidth) {
+                            float amp = u_ripples[i].w * exp(-rAge * 1.5) * (1.0 - d / waveWidth);
+                            h += sin((rDist - waveFront) * 80.0) * amp;
+                        }
+                    }
+                }
+
+                return h;
+            }
+
+            void main() {
+                vec2 st = gl_FragCoord.xy / u_resolution;
+                vec2 aspectUV = (gl_FragCoord.xy - 0.5 * u_resolution) / min(u_resolution.x, u_resolution.y);
+
+                vec2 e = vec2(0.003, 0.0);
+                float hC = getHeight(aspectUV);
+                float hR = getHeight(aspectUV + e.xy);
+                float hU = getHeight(aspectUV + e.yx);
+
+                vec3 normal = normalize(vec3((hC - hR) / e.x, (hC - hU) / e.x, 1.0));
+
+                vec3 lightDir1 = normalize(vec3(0.5, 0.8, 0.6));
+                vec3 lightDir2 = normalize(vec3(-0.6, -0.4, 0.4));
+                
+                vec2 curUV = (u_cursor - 0.5 * u_resolution) / min(u_resolution.x, u_resolution.y);
+                curUV.y = -curUV.y;
+                vec3 cursorLightDir = normalize(vec3(curUV - aspectUV, 0.25));
+
+                float diff1 = max(dot(normal, lightDir1), 0.0);
+                float diff2 = max(dot(normal, lightDir2), 0.0);
+                float cursorDiff = max(dot(normal, cursorLightDir), 0.0) * 0.4;
+
+                vec3 viewDir = vec3(0.0, 0.0, 1.0);
+                vec3 ref1 = reflect(-lightDir1, normal);
+                float spec1 = pow(max(dot(viewDir, ref1), 0.0), 32.0);
+
+                // ОРИГИНАЛЬНЫЙ ТЕМНЫЙ ЦВЕТ
+                vec3 baseColor = vec3(0.043, 0.043, 0.047);
+                vec3 highlightColor = vec3(0.949, 0.941, 0.921);
+
+                vec3 finalColor = baseColor;
+                finalColor += highlightColor * (diff1 * 0.12 + diff2 * 0.08 + cursorDiff);
+                finalColor += highlightColor * (spec1 * 0.35);
+
+                finalColor = mix(baseColor * 0.8, finalColor, smoothstep(-0.2, 0.6, hC));
+
+                gl_FragColor = vec4(finalColor, 1.0);
+            }
+        `;
+
+        function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error(gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        let program, positionBuffer;
+        let uResolution, uTime, uCursor, uCursorVel, uRipples, uRippleCount;
+
+        if (gl) {
+            const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+            program = gl.createProgram();
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.linkProgram(program);
+
+            positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                -1, -1,  1, -1, -1,  1,
+                -1,  1,  1, -1,  1,  1,
+            ]), gl.STATIC_DRAW);
+
+            uResolution = gl.getUniformLocation(program, 'u_resolution');
+            uTime = gl.getUniformLocation(program, 'u_time');
+            uCursor = gl.getUniformLocation(program, 'u_cursor');
+            uCursorVel = gl.getUniformLocation(program, 'u_cursor_vel');
+            uRipples = gl.getUniformLocation(program, 'u_ripples');
+            uRippleCount = gl.getUniformLocation(program, 'u_ripple_count');
+        }
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let springX = mouseX;
+        let springY = mouseY;
+        let velX = 0;
+        let velY = 0;
+
+        const ripples = []; 
+
+        function resizeCanvas() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            if (gl) {
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        window.addEventListener('click', (e) => {
+            if (ripples.length >= 8) ripples.shift();
+            ripples.push({
+                x: e.clientX * (window.devicePixelRatio || 1),
+                y: e.clientY * (window.devicePixelRatio || 1),
+                startTime: performance.now() * 0.001,
+                amplitude: 0.25
+            });
+        });
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let startTime = performance.now();
+
+        function render(now) {
+            const time = (now - startTime) * 0.001;
+
+            const stiffness = 0.08;
+            const damping = 0.75;
+            const dx = mouseX - springX;
+            const dy = mouseY - springY;
+
+            velX = velX * damping + dx * stiffness;
+            velY = velY * damping + dy * stiffness;
+            springX += velX;
+            springY += velY;
+
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            if (cursorDot && cursorRing) {
+                cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+                cursorRing.style.transform = `translate(${springX}px, ${springY}px) translate(-50%, -50%)`;
+            }
+
+            if (gl && program && !reduceMotion) {
+                gl.useProgram(program);
+
+                const posAttr = gl.getAttribLocation(program, 'a_position');
+                gl.enableVertexAttribArray(posAttr);
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
+
+                gl.uniform2f(uResolution, canvas.width, canvas.height);
+                gl.uniform1f(uTime, time);
+                gl.uniform2f(uCursor, springX * (window.devicePixelRatio || 1), springY * (window.devicePixelRatio || 1));
+                gl.uniform2f(uCursorVel, velX, velY);
+
+                const rippleData = new Float32Array(32);
+                for (let i = 0; i < 8; i++) {
+                    if (i < ripples.length) {
+                        rippleData[i * 4 + 0] = ripples[i].x;
+                        rippleData[i * 4 + 1] = ripples[i].y;
+                        rippleData[i * 4 + 2] = ripples[i].startTime;
+                        rippleData[i * 4 + 3] = ripples[i].amplitude;
+                    }
+                }
+                gl.uniform4fv(uRipples, rippleData);
+                gl.uniform1i(uRippleCount, ripples.length);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            }
+
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+
+        /* ------------------------------------------------------------------
+           2. Typography Character Reveal Initialization
+           ------------------------------------------------------------------ */
+       document.addEventListener('DOMContentLoaded', () => {
+            const titleEl = document.getElementById('hero-title');
+            if (!titleEl) return;
+
+            const words = titleEl.querySelectorAll('span.inline-flex');
+            let charIndex = 0;
+            
+            words.forEach(word => {
+                const text = word.textContent.trim();
+                word.innerHTML = '';
+                
+                text.split('').forEach((char) => {
+                    const span = document.createElement('span');
+                    span.className = 'char-reveal';
+                    span.style.transitionDelay = `${charIndex * 35}ms`;
+                    span.innerHTML = char;
+                    word.appendChild(span);
+                    charIndex++;
+                });
+            });
+
+            // Trigger Animation
+            setTimeout(() => {
+                document.querySelectorAll('.char-reveal').forEach(el => el.classList.add('active'));
+            }, 100);
+        });
+
+        /* ------------------------------------------------------------------
+           3. Magnetic Buttons & Hover Cursor Effects
+           ------------------------------------------------------------------ */
+        const cursorRing = document.getElementById('cursor-ring');
+        const magneticBtns = document.querySelectorAll('.btn-magnetic');
+
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px)';
+            });
+
+            btn.addEventListener('mouseenter', () => {
+                if (cursorRing) cursorRing.classList.add('hovered');
+            });
+            btn.addEventListener('mouseleave', () => {
+                if (cursorRing) cursorRing.classList.remove('hovered');
+            });
+        });
+
+        /* ------------------------------------------------------------------
+           4. 3D Card Tilt Interaction
+           ------------------------------------------------------------------ */
+        const cards = document.querySelectorAll('.card-tilt');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -10; 
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+            });
+
+            card.addEventListener('mouseenter', () => {
+                if (cursorRing) cursorRing.classList.add('hovered');
+            });
+            card.addEventListener('mouseleave', () => {
+                if (cursorRing) cursorRing.classList.remove('hovered');
+            });
+        });
+    </script>
+</body>
+</html>
