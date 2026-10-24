@@ -34,3 +34,28 @@ const observer = new IntersectionObserver((entries) => {
 }, { rootMargin: '-35% 0px -55% 0px', threshold: [0.05, 0.2, 0.5] });
 
 sections.forEach(section => observer.observe(section));
+
+// Логика для открытия префабов в iframe
+function openDemo(url) {
+  const modal = document.getElementById('demo-modal');
+  const iframe = document.getElementById('demo-iframe');
+  
+  // Подгружаем нужный HTML файл
+  iframe.src = url;
+  
+  // Показываем модалку и блокируем скролл основной страницы
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDemo() {
+  const modal = document.getElementById('demo-modal');
+  const iframe = document.getElementById('demo-iframe');
+  
+  // Прячем модалку, очищаем iframe (чтобы звук/анимации остановились)
+  modal.classList.add('hidden');
+  iframe.src = '';
+  
+  // Возвращаем скролл
+  document.body.style.overflow = '';
+}

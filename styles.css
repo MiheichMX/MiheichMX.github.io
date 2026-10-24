@@ -23,10 +23,15 @@ font-display:swap;
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
 
-body{
-margin:0;
+body {
+    margin: 0;
+    overflow-x: hidden; /* Защита от бокового скролла */
+    /* ... твои остальные стили body ... */
 background:
 radial-gradient(circle at 75% 8%, rgba(57,103,255,.12), transparent 26%),
 radial-gradient(circle at 16% 24%, rgba(255,59,207,.07), transparent 24%),
@@ -48,16 +53,59 @@ a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .section-shell{max-width:var(--max);margin:0 auto;position:relative}
 
-/* --- ШАПКА --- */
-.topbar{
-position:sticky;top:0;z-index:80;
-display:flex;align-items:center;justify-content:space-between;
-min-height:76px;padding:8px 28px;
-background:rgba(5,8,18,.84);
-backdrop-filter:blur(18px);
-border-bottom:1px solid rgba(86,116,255,.16);
-max-width:var(--max);
-margin:0 auto;
+/* --- ДВУХУРОВНЕВАЯ ШАПКА --- */
+.master-header {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    width: 100%;
+}
+
+
+/* --- ВЕРХНИЙ УРОВЕНЬ --- */
+.global-nav {
+    background: #03050a; 
+    border-bottom: 1px solid rgba(86,116,255,.16);
+    width: 100%; /* Фон тянется на весь экран */
+}
+
+.global-nav-container {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 14px 54px 10px; /* Отступы теперь строго внутри контейнера */
+    display: flex;
+    justify-content: flex-end;
+    gap: 30px;
+    font-family: "JetBrains Mono NL", "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.global-nav-container a {
+    transition: color 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.global-nav-container a:hover, .global-nav-container a.active {
+    color: var(--cyan);
+}
+
+/* --- НИЖНИЙ УРОВЕНЬ (ОСНОВНАЯ ШАПКА) --- */
+.topbar {
+    background: rgba(5,8,18,0.84);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(86,116,255,0.16);
+    width: 100%; /* Фон тянется на весь экран */
+}
+
+.topbar-container {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 8px 54px; /* Отступы строго внутри контейнера, как у верхнего меню */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 76px;
 }
 
 .logo-link img{width:112px;height:auto}
@@ -114,15 +162,27 @@ transform:translateY(-1px);
 
 /* --- ГЛАВНЫЙ ЭКРАН --- */
 .hero {
-min-height: 880px;
-overflow: hidden;
-border-bottom: 1px solid rgba(93,119,255,.18);
+    min-height: 880px;
+    border-bottom: 1px solid rgba(93,119,255,.18);
 }
-.hero-bg{
-position:absolute;inset:0;
-background:
-linear-gradient(90deg,rgba(5,8,18,.98) 8%,rgba(5,8,18,.78) 35%,rgba(5,8,18,.25) 75%,rgba(5,8,18,.48) 100%),
-url("assets/bg/header_background.webp") center/cover no-repeat;
+/* --- ФОН НА ВСЮ ШИРИНУ С ГРАДИЕНТНЫМ РАСТВОРЕНИЕМ --- */
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: 100%;
+    transform: translateX(-50%);
+    background:
+        /* 1. Растворение снизу (в цвет фона сайта) */
+        linear-gradient(to top, var(--bg) 0%, transparent 15%),
+        /* 2. Растворение по краям (слева и справа) */
+        linear-gradient(to right, var(--bg) 0%, transparent 10%, transparent 90%, var(--bg) 100%),
+        /* 3. Старое основное затемнение контента */
+        linear-gradient(90deg, rgba(5,8,18,.98) 8%, rgba(5,8,18,.78) 35%, rgba(5,8,18,.25) 75%, rgba(5,8,18,.48) 100%),
+        /* 4. Сама картинка */
+        url("assets/bg/header_background.webp") center/cover no-repeat;
+    z-index: 0;
 }
 .hero-vignette{
 position:absolute;inset:0;
@@ -361,7 +421,7 @@ width: 110px; height: 110px; border-radius: 18px; object-fit: cover;
 }
 
 .footer-tagline{padding-top:12px;font-family:"Terminator","Courier New",monospace;font-size:16px;line-height:1.12;color:var(--pink)}
-.kicker{font-family:"Terminator","Courier New",monospace;font-size:13px;color:var(--pink);letter-spacing:.2px;margin-bottom:12px}
+.kicker{font-family:"Terminator","Courier New",monospace;font-size:16px;color:var(--pink);letter-spacing:.2px;margin-bottom:12px}
 .footer-nav{display:flex;flex-direction:column;gap:11px;font-size:18px}
 .footer-nav a:hover,.contact-links a:hover{color:var(--cyan)}
 .contact-btn{margin-bottom:18px}
@@ -756,4 +816,76 @@ section:target {
 .cyber-contacts a:hover .mail-icon svg {
     stroke: var(--pink);
     filter: drop-shadow(0 0 3px var(--pink));
+    
+}
+
+/* --- СТИЛИ ДЛЯ ВСПЛЫВАЮЩЕГО ОКНА PREFABS --- */
+.demo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 18, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2vw;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.demo-modal-overlay.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.demo-modal-content {
+  width: 100%;
+  max-width: 1600px;
+  height: 90vh;
+  background: #000;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 50px rgba(52, 215, 255, 0.15);
+}
+
+.demo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #03050a;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.demo-modal-title {
+  font-family: "JetBrains Mono NL", "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--cyan);
+  letter-spacing: 1px;
+}
+
+.demo-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--pink);
+  font-family: "JetBrains Mono NL", "JetBrains Mono", monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.demo-close-btn:hover {
+  color: #fff;
+  text-shadow: 0 0 10px var(--pink);
+}
+
+#demo-iframe {
+  width: 100%;
+  height: 100%;
+  background: #fff; /* Если префаб долго грузится, не будет черной дыры */
 }

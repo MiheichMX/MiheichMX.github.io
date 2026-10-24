@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070a12">
+  <title>MIHEICH MX — СИСТЕМА В РАЗРАБОТКЕ</title>
+  <link rel="icon" href="assets/favicon/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+  
+  <!-- ТВОЯ НОВАЯ ШАПКА -->
+  <header class="master-header">
+    <div class="global-nav">
+      <div class="global-nav-container">
+        <!-- Не забудь в каждом файле переносить класс class="active" на нужную ссылку -->
+        <a href="index.html">/MAINFRAME</a>
+        <a href="prefabs.html"> /ПРЕФАБЫ</a>
+        <a href="syndicate.html" class="active">/СИНДИКАТ</a>
+        <a href="logbook.html">/БОРТОВОЙ_ЖУРНАЛ</a>
+        <a href="polygon.html">/ПОЛИГОН</a>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div class="topbar-container">
+        <a class="logo-link" href="index.html#top">
+          <img src="assets/logo/logo_mx.png" alt="MIHEICH MX">
+        </a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav" id="site-nav">
+          <a href="index.html#services">ИНЖЕНЕРНЫЙ СТЕК</a>
+          <a href="index.html#presentations">ПРЕЗЕНТАЦИИ</a>
+          <a href="index.html#geo">ГЕОМАРКЕТИНГ</a>
+          <a href="index.html#web">WEB-САЙТЫ</a>
+          <a href="index.html#contact">КОНТАКТЫ</a>
+        </nav>
+        <a class="nav-cta" href="https://t.me/MiheichMX" target="_blank">ПРОТОКОЛ СВЯЗИ</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- КИБЕР-ЗАГЛУШКА БЕЗ НОВЫХ СТИЛЕЙ -->
+    <section class="hero section-shell" style="min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; border-bottom: none;">
+      
+      <!-- Темный фон с растворением -->
+      <div class="hero-bg" style="opacity: 0.4;"></div>
+      <div class="hero-vignette"></div>
+
+      <div class="hero-content" style="padding: 0; max-width: 900px; z-index: 10;">
+        <div class="eyebrow" style="color: var(--cyan);">✦ СТАТУС: ПРОЕКТИРОВАНИЕ ✦</div>
+        
+        <h1 style="font-size: clamp(40px, 6vw, 80px); margin-bottom: 20px;">
+          <span>СЕКТОР</span>
+          <!-- Градиент в циановых тонах для разнообразия -->
+          <strong style="background: linear-gradient(135deg, #32D7FF 0%, #576BEC 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ИЗОЛИРОВАН</strong>
+        </h1>
+        
+        <p class="hero-lead" style="margin-bottom: 40px;">
+          Здесь возводится новая инфраструктура.<br>Боевой контент будет загружен в ближайшее время.
+        </p>
+        
+        <a class="ghost-btn hero-btn" href="index.html">← ВЕРНУТЬСЯ НА MAINFRAME</a>
+      </div>
+
+      <!-- Центральные орбиты для эстетики сканирования -->
+      <div class="hero-orbit" style="left: 50%; top: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; opacity: 0.2;">
+        <div class="hero-ring ring-a"></div>
+        <div class="hero-scanline"></div>
+      </div>
+    </section>
+   </main> <!-- ЗАКРЫВАЕМ MAIN ЗДЕСЬ, ДО ФУТЕРА -->
+
+  <!-- ТЕРМИНАЛ СВЯЗИ (ФУТЕР НА ВСЮ ШИРИНУ) -->
+  <section class="contact" id="contact" style="position: relative; width: 100%; background-color: #070a12; border-top: 1px solid rgba(52,215,255,0.15); overflow: hidden;">
+    
+    <!-- Фоновый слой на 100% ширины -->
+    <div class="contact-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.4; pointer-events: none;"></div>
+    
+    <!-- Контентный контейнер -->
+    <div style="position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 80px 40px 40px;">
+      <div class="contact-grid">
+        
+        <!-- Колонка 1: Бренд и Аватар -->
+        <div class="contact-brand">
+          <div class="avatar-gradient-frame">
+            <img class="footer-avatar" src="assets/avatar/social_media_avatar_footer.webp" alt="MIHEICH">
+          </div>
+          <div class="footer-tagline">Разработка и упаковка<br>отказоустойчивых b2b систем</div>
+        </div>
+
+        <!-- Колонка 2: Командный хаб -->
+        <div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">КОМАНДНЫЙ ХАБ</div>
+          <nav class="footer-nav">
+            <a href="index.html#services">Инженерный стек</a>
+            <a href="index.html#presentations">Презентации</a>
+            <a href="index.html#geo">Геомаркетинг</a>
+            <a href="index.html#web">WEB-сайты</a>
+            <a href="index.html#contact">Контакты</a>
+          </nav>
+        </div>
+
+        <!-- Колонка 3: Пустота под партнерские ссылки -->
+        <div class="partner-space">
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">ПАРТНЕРСКАЯ СЕТЬ</div>
+          <div class="empty-slot">Блок в разработке...</div>
+        </div>
+
+        <!-- Колонка 4: Терминал связи -->
+        <div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">ТЕРМИНАЛ СВЯЗИ</div>
+          <div class="contact-links cyber-contacts" style="margin-top: 15px;">
+            <a href="https://t.me/MiheichMX" target="_blank" rel="noopener noreferrer">
+              <span class="cyber-icon tg-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </span>
+              @MiheichMX
+            </a>
+       
+            <a href="mailto:miheich-master@ya.ru">
+              <span class="cyber-icon mail-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M2 4h20v16H2z"></path><polyline points="22,4 12,13 2,4"></polyline></svg>
+              </span>
+              miheich-master@ya.ru
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom" style="
+        position: relative !important;
+        inset: auto !important;
+        margin: 60px 0 0 0 !important; 
+        border-top: 1px solid rgba(255,255,255,0.05); 
+        padding: 25px 0 40px 0 !important; 
+        display: flex !important; 
+        justify-content: space-between !important; 
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        width: 100% !important;
+        clear: both !important;
+      ">
+        <div style="color: var(--muted); font-size: 13px;">
+          <span>© 2026 MIHEICH MX.</span> Все системы функционируют в штатном режиме.
+        </div>
+        <div>
+          <a href="#" style="color: var(--muted); text-decoration: none; font-size: 13px;">Политика конфиденциальности</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- СКРИПТЫ ВСЕГДА В САМОМ НИЗУ, ПОСЛЕ ФУТЕРА -->
+  <script src="script.js"></script>
+
+  <!-- Подвал сюда можно пока не тянуть, заглушка займет весь экран -->
+  <script src="script.js"></script>
+</body>
+</html>

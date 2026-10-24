@@ -10,24 +10,42 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body id="top">
-  <header class="topbar">
-    <a class="logo-link" href="#top" aria-label="MIHEICH MX">
-      <img src="assets/logo/logo_mx.png" alt="MIHEICH MX">
-    </a>
+  <header class="master-header">
+    <!-- ВЕРХНИЙ УРОВЕНЬ: Глобальная сеть директорий -->
+    <div class="global-nav">
+      <div class="global-nav-container">
+        <a href="index.html" class="active">/MAINFRAME</a>
+        <a href="prefabs.html">/ПРЕФАБЫ</a>
+        <a href="syndicate.html">/СИНДИКАТ</a>
+        <a href="logbook.html">/БОРТОВОЙ_ЖУРНАЛ</a>
+        <a href="polygon.html">/ПОЛИГОН</a>
+      </div>
+    </div>
 
-    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
-      <span></span><span></span><span></span>
-    </button>
+    <!-- НИЖНИЙ УРОВЕНЬ: Локальный пульт текущей страницы -->
+    <div class="topbar">
+      <div class="topbar-container">
+        
+        <a class="logo-link" href="index.html#top" aria-label="MIHEICH MX">
+          <img src="assets/logo/logo_mx.png" alt="MIHEICH MX">
+        </a>
 
-    <nav class="site-nav" id="site-nav">
-      <a href="#services">ИНЖЕНЕРНЫЙ СТЕК</a>
-      <a href="#presentations">ПРЕЗЕНТАЦИИ</a>
-      <a href="#geo">ГЕОМАРКЕТИНГ</a>
-      <a href="#web">WEB-САЙТЫ</a>
-      <a href="#contact">КОНТАКТЫ</a>
-    </nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Открыть меню">
+          <span></span><span></span><span></span>
+        </button>
 
-    <a class="nav-cta" href="https://t.me/MiheichMX?text=Привет!%20Хочу%20обсудить%20запуск%20веб-системы" target="_blank" rel="noopener noreferrer">ПРОТОКОЛ СВЯЗИ</a>
+        <nav class="site-nav" id="site-nav">
+          <a href="index.html#services">ИНЖЕНЕРНЫЙ СТЕК</a>
+          <a href="index.html#presentations">ПРЕЗЕНТАЦИИ</a>
+          <a href="index.html#geo">ГЕОМАРКЕТИНГ</a>
+          <a href="index.html#web">WEB-САЙТЫ</a>
+          <a href="index.html#contact">КОНТАКТЫ</a>
+        </nav>
+
+        <a class="nav-cta" href="https://t.me/MiheichMX?text=Привет!%20Хочу%20обсудить%20запуск%20веб-системы" target="_blank" rel="noopener noreferrer">ПРОТОКОЛ СВЯЗИ</a>
+        
+      </div>
+    </div>
   </header>
 
   <main>
@@ -84,7 +102,10 @@
             <p class="card-main">Лендинги, B2B-каталоги<br>и сложные интернет-магазины</p>
             <p class="card-sub">Отказоустойчивый код, быстрый поиск и адаптация</p>
             <!-- Кибер-украшалка -->
-            <div class="cyber-decor"><div class="decor-bar"></div><span class="decor-hash">SYS.ON</span></div>
+            <div class="cyber-decor" style="display: flex; align-items: center; gap: 8px; margin-top: 15px;">
+  <div class="decor-bar" style="width: 4px; height: 12px; background: var(--cyan); box-shadow: 0 0 10px var(--cyan);"></div>
+  <span class="decor-hash" style="color: var(--cyan); font-family: 'Terminator', monospace; font-size: 11px; text-shadow: 0 0 10px rgba(52,215,255,0.9); letter-spacing: 1px;">SYS.ON</span>
+</div>
           </article>
 
           <article class="stack-card">
@@ -93,7 +114,10 @@
             <h3 class="cyan">ГЕОМАРКЕТИНГ</h3>
             <p class="card-main">Полная упаковка профиля и вывод бизнеса в топ геовыдачи</p>
             <p class="card-sub">Управление репутацией и стабильный поток звонков с карт</p>
-            <div class="cyber-decor"><div class="decor-bar"></div><span class="decor-hash">SYS.ON</span></div>
+<div class="cyber-decor" style="display: flex; align-items: center; gap: 8px; margin-top: 15px;">
+  <div class="decor-bar" style="width: 4px; height: 12px; background: var(--cyan); box-shadow: 0 0 10px var(--cyan);"></div>
+  <span class="decor-hash" style="color: var(--cyan); font-family: 'Terminator', monospace; font-size: 11px; text-shadow: 0 0 10px rgba(52,215,255,0.9); letter-spacing: 1px;">SYS.ON</span>
+</div>
           </article>
 
           <article class="stack-card">
@@ -102,7 +126,10 @@
             <h3>ЯНДЕКС.ДИРЕКТ</h3>
             <p class="card-main">Снайперская настройка рекламы на Поиске и в РСЯ</p>
             <p class="card-sub">Горячие лиды с понятной ценой без слива бюджетов</p>
-            <div class="cyber-decor"><div class="decor-bar"></div><span class="decor-hash">SYS.ON</span></div>
+            <div class="cyber-decor" style="display: flex; align-items: center; gap: 8px; margin-top: 15px;">
+  <div class="decor-bar" style="width: 4px; height: 12px; background: var(--cyan); box-shadow: 0 0 10px var(--cyan);"></div>
+  <span class="decor-hash" style="color: var(--cyan); font-family: 'Terminator', monospace; font-size: 11px; text-shadow: 0 0 10px rgba(52,215,255,0.9); letter-spacing: 1px;">SYS.ON</span>
+</div>
           </article>
 
           <article class="stack-card">
@@ -111,7 +138,10 @@
             <h3 class="cyan">ПРЕЗЕНТАЦИИ</h3>
             <p class="card-main">Коммерческие предложения и презы для закрытия сделок</p>
             <p class="card-sub">Захват внимания ЛПР за 3 секунды и пробитие баннерной слепоты</p>
-            <div class="cyber-decor"><div class="decor-bar"></div><span class="decor-hash">SYS.ON</span></div>
+            <div class="cyber-decor" style="display: flex; align-items: center; gap: 8px; margin-top: 15px;">
+  <div class="decor-bar" style="width: 4px; height: 12px; background: var(--cyan); box-shadow: 0 0 10px var(--cyan);"></div>
+  <span class="decor-hash" style="color: var(--cyan); font-family: 'Terminator', monospace; font-size: 11px; text-shadow: 0 0 10px rgba(52,215,255,0.9); letter-spacing: 1px;">SYS.ON</span>
+</div>
           </article>
         </div>
       </div>
@@ -122,7 +152,7 @@
     <section class="cases section-shell" id="presentations">
       <div class="section-title-row">
         <div>
-          <h2 class="title-terminator">ПРЕЗЕНТАЦИИ <span>КЕЙСЫ</span></h2>
+          <h2 class="title-terminator">ПРЕЗЕНТАЦИИ <span></span></h2>
         </div>
       </div>
 
@@ -143,6 +173,7 @@
       </div>
 
       <div class="geo-layout">
+        
         <!-- Левый блок: Текст (прижат к верху) и Картинка (прижата к низу) -->
         <div class="geo-copy">
           <div class="geo-text-content">
@@ -176,40 +207,55 @@
       </div>
 
       <div class="system-grid">
+        <!-- КЕЙС 1: ТЕХЦЕНТР КОЛЯНА -->
         <article class="system-card">
-          <div class="system-top"><span>01</span><span>Автобизнес</span></div>
+          <div class="system-top"><span>01</span><span style="color: var(--cyan);">Автобизнес</span></div>
           <h3>Премиум Техцентр</h3>
           <div class="perspective-img">
-            <img src="assets/systems/web_system_premauto.png" alt="Премиум Техцентр">
+            <img src="assets/systems/web_system_dizelkof.webp" alt="Премиум Техцентр">
           </div>
           <p>Трафик конвертируется напрямую в запись на подъёмник</p>
-          <div class="chips"><span>Директ</span><span>Лендинг</span><span>Лидген</span></div>
+          <div class="chips" style="margin-bottom: 20px;"><span>Директ</span><span>Лендинг</span><span>Лидген</span></div>
+          <a href="polygon.html#techcenter" class="ghost-btn" style="display: block; width: 100%; text-align: center; text-decoration: none; font-size: 12px; padding: 12px;">ОТКРЫТЬ ДОСЬЕ</a>
         </article>
 
+        <!-- КЕЙС 2: AVTOELIT -->
         <article class="system-card">
-          <div class="system-top"><span>02</span><span>B2B Каталог</span></div>
+          <div class="system-top"><span>02</span><span style="color: var(--cyan);">B2B Каталог</span></div>
           <h3>Запчасти КамАЗ</h3>
           <div class="perspective-img">
-            <img src="assets/systems/web_system_avtoelit.png" alt="Каталог запчастей КамАЗ">
+            <img src="assets/systems/web_system_avtoelit.webp" alt="Каталог запчастей КамАЗ">
           </div>
           <p>Заказ деталей оформляется в пару кликов без нервов</p>
-          <div class="chips"><span>E-commerce</span><span>Базы данных</span><span>Поиск</span></div>
+          <div class="chips" style="margin-bottom: 20px;"><span>E-commerce</span><span>Базы данных</span><span>Поиск</span></div>
+          <a href="polygon.html#avtoelit" class="ghost-btn" style="display: block; width: 100%; text-align: center; text-decoration: none; font-size: 12px; padding: 12px;">ОТКРЫТЬ ДОСЬЕ</a>
         </article>
 
+        <!-- БЛОК 3: ПРЕФАБЫ (ВМЕСТО АДДИТИВОВ) -->
         <article class="system-card">
-          <div class="system-top"><span>03</span><span>Технологии</span></div>
-          <h3>Аддитивы <em>AG</em></h3>
+          <div class="system-top"><span>03</span><span style="color: var(--pink);">Ready-to-use</span></div>
+          <h3>Арсенал Префабов</h3>
           <div class="perspective-img">
-            <img src="assets/systems/web_system_ag.png" alt="Аддитивы AG">
+            <!-- Закинь сюда красивый скриншот магазина префабов (или голограмму) -->
+            <img src="assets/systems/web_system_prefabs.webp" alt="Магазин Префабов">
           </div>
-          <p>Убойные офферы системно собирают лиды с рынка</p>
-          <div class="chips"><span>Директ</span><span>Лендинг</span><span>Лидген</span></div>
+          <p>Готовые архитектурные решения. Выбирай, тестируй, забирай</p>
+          <div class="chips" style="margin-bottom: 20px;"><span>Магазин</span><span>WebGL</span><span>UI/UX</span></div>
+          <a href="prefabs.html" class="ghost-btn" style="display: block; width: 100%; text-align: center; text-decoration: none; font-size: 12px; padding: 12px; border-color: var(--pink);">ПЕРЕЙТИ В АРСЕНАЛ</a>
         </article>
       </div>
     </section>
 
-    <section class="contact section-shell" id="contact">
-      <div class="contact-bg"></div>
+    </main> <!-- ЗАКРЫВАЕМ MAIN ЗДЕСЬ, ДО ФУТЕРА -->
+
+  <!-- ТЕРМИНАЛ СВЯЗИ (ФУТЕР НА ВСЮ ШИРИНУ) -->
+  <section class="contact" id="contact" style="position: relative; width: 100%; background-color: #070a12; border-top: 1px solid rgba(52,215,255,0.15); overflow: hidden;">
+    
+    <!-- Фоновый слой на 100% ширины -->
+    <div class="contact-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.4; pointer-events: none;"></div>
+    
+    <!-- Контентный контейнер -->
+    <div style="position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 80px 40px 40px;">
       <div class="contact-grid">
         
         <!-- Колонка 1: Бренд и Аватар -->
@@ -222,25 +268,25 @@
 
         <!-- Колонка 2: Командный хаб -->
         <div>
-          <div class="kicker">КОМАНДНЫЙ ХАБ</div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">КОМАНДНЫЙ ХАБ</div>
           <nav class="footer-nav">
-  <a href="#services">Инженерный стек</a>
-  <a href="#presentations">Презентации</a>
-  <a href="#geo">Геомаркетинг</a>
-  <a href="#web">WEB-сайты</a>
-  <a href="#contact">Контакты</a>
-</nav>
+            <a href="index.html#services">Инженерный стек</a>
+            <a href="index.html#presentations">Презентации</a>
+            <a href="index.html#geo">Геомаркетинг</a>
+            <a href="index.html#web">WEB-сайты</a>
+            <a href="index.html#contact">Контакты</a>
+          </nav>
         </div>
 
         <!-- Колонка 3: Пустота под партнерские ссылки -->
         <div class="partner-space">
-          <div class="kicker">ПАРТНЕРСКАЯ СЕТЬ</div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">ПАРТНЕРСКАЯ СЕТЬ</div>
           <div class="empty-slot">Блок в разработке...</div>
         </div>
 
         <!-- Колонка 4: Терминал связи -->
         <div>
-          <div class="kicker">ТЕРМИНАЛ СВЯЗИ</div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">ТЕРМИНАЛ СВЯЗИ</div>
           <div class="contact-links cyber-contacts" style="margin-top: 15px;">
             <a href="https://t.me/MiheichMX" target="_blank" rel="noopener noreferrer">
               <span class="cyber-icon tg-icon">
@@ -259,12 +305,32 @@
         </div>
       </div>
 
-      <div class="footer-bottom">
-        <span>© 2026 MIHEICH MX.</span> Все системы функционируют в штатном режиме.
-        <a href="#">Политика конфиденциальности</a>
+      <div class="footer-bottom" style="
+        position: relative !important;
+        inset: auto !important;
+        margin: 60px 0 0 0 !important; 
+        border-top: 1px solid rgba(255,255,255,0.05); 
+        padding: 25px 0 40px 0 !important; 
+        display: flex !important; 
+        justify-content: space-between !important; 
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        width: 100% !important;
+        clear: both !important;
+      ">
+        <div style="color: var(--muted); font-size: 13px;">
+          <span>© 2026 MIHEICH MX.</span> Все системы функционируют в штатном режиме.
+        </div>
+        <div>
+          <a href="#" style="color: var(--muted); text-decoration: none; font-size: 13px;">Политика конфиденциальности</a>
+        </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <!-- СКРИПТЫ ВСЕГДА В САМОМ НИЗУ, ПОСЛЕ ФУТЕРА -->
+  <script src="script.js"></script>
 
   <script src="script.js"></script>
 </body>

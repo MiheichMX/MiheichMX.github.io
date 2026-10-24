@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070a12">
+  <title>MIHEICH MX — СИСТЕМА В РАЗРАБОТКЕ</title>
+  <link rel="icon" href="assets/favicon/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body id="top">
+  
+  <!-- ТВОЯ НОВАЯ ШАПКА -->
+  <header class="master-header">
+    <div class="global-nav">
+      <div class="global-nav-container">
+        <!-- Не забудь в каждом файле переносить класс class="active" на нужную ссылку -->
+        <a href="index.html">/MAINFRAME</a>
+        <a href="prefabs.html" class="active">/ПРЕФАБЫ</a>
+        <a href="syndicate.html">/СИНДИКАТ</a>
+        <a href="logbook.html">/БОРТОВОЙ_ЖУРНАЛ</a>
+        <a href="polygon.html">/ПОЛИГОН</a>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div class="topbar-container">
+        <a class="logo-link" href="index.html#top">
+          <img src="assets/logo/logo_mx.png" alt="MIHEICH MX">
+        </a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="site-nav" id="site-nav">
+          <a href="index.html#services">ИНЖЕНЕРНЫЙ СТЕК</a>
+          <a href="index.html#presentations">ПРЕЗЕНТАЦИИ</a>
+          <a href="index.html#geo">ГЕОМАРКЕТИНГ</a>
+          <a href="index.html#web">WEB-САЙТЫ</a>
+          <a href="index.html#contact">КОНТАКТЫ</a>
+        </nav>
+        <a class="nav-cta" href="https://t.me/MiheichMX" target="_blank">ПРОТОКОЛ СВЯЗИ</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Шапка витрины -->
+      <!-- Шапка витрины -->
+    <section class="hero section-shell" style="position: relative; min-height: 55vh; border-bottom: none; display: flex; align-items: center;">
+     
+      
+      <!-- Текст (перебили старые отступы из CSS) -->
+      <div class="hero-content" style="padding: 120px 54px 80px; position: relative; z-index: 5; width: 100%;">
+        <div class="eyebrow">✦ READY-TO-USE СИСТЕМЫ</div>
+        <h1 style="font-size: clamp(36px, 5vw, 64px); margin-bottom: 15px;">АРСЕНАЛ <strong style="background: linear-gradient(135deg, #F717B5 0%, #32D7FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ПРЕФАБОВ</strong></h1>
+        <p class="hero-lead" style="max-width: 500px;">Готовые боевые веб-решения под ключ. Запускай Live Demo, тестируй шейдеры в реальном времени и забирай архитектуру под свой проект.</p>
+        
+        <!-- Мини-статистика для магазина -->
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+          <div style="border-left: 2px solid var(--cyan); padding-left: 15px;">
+            <span style="display: block; font-family: 'Terminator', monospace; color: #fff; font-size: 18px;">24 ЧАСА</span>
+            <span style="font-size: 11px; color: var(--muted); text-transform: uppercase;">на развертывание</span>
+          </div>
+          <div style="border-left: 2px solid var(--pink); padding-left: 15px;">
+            <span style="display: block; font-family: 'Terminator', monospace; color: #fff; font-size: 18px;">CLEAN CODE</span>
+            <span style="font-size: 11px; color: var(--muted); text-transform: uppercase;">без конструкторов</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кибер-орбиты (отцентрированы по вертикали) -->
+      <div class="hero-orbit" style="right: 5%; top: 50%; transform: translateY(-50%); width: 40%; height: 70%;">
+        <div class="hero-ring ring-a"></div>
+        <div class="hero-ring ring-b"></div>
+        <div class="hero-scanline"></div>
+      </div>
+
+      <!-- Контейнер под картинку-голограмму (отцентрирован по вертикали) -->
+      <!-- Контейнер под картинку-голограмму (отцентрирован и увеличен) -->
+      <div class="hero-avatar" style="
+        position: absolute;
+        right: -2%; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        width: 55%; 
+        max-width: 750px; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        z-index: 10; 
+      ">
+        <img src="assets/bg/hologram.webp" alt="Cyber Prefab" style="
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+          filter: drop-shadow(0 0 35px rgba(52,215,255,0.5));
+          mix-blend-mode: screen;
+        ">
+      </div>
+    </section>
+
+    <!-- Сетка префабов -->
+    <section class="systems section-shell" id="store" style="padding-top: 0; padding-bottom: 90px;">
+      <div class="system-grid">
+        
+        <!-- ПРЕФАБ 1: ABYSS -->
+        <article class="system-card">
+          <div class="system-top"><span>01</span><span style="color: var(--cyan);">Арт-Дирекшн</span></div>
+          <h3>ABYSS</h3>
+          <div class="perspective-img">
+            <!-- Заглушка под скриншот -->
+            <div style="width:100%; aspect-ratio:3/2; background:#04070d; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(50,215,255,0.3);">
+              <span style="font-family:'Terminator', monospace; color:var(--muted); font-size:11px;"><img src="prefabs_live/images-vitrina/abyss_art_direction.webp" alt=""></span>
+            </div>                                     
+          </div>
+          <p style="font-size: 15px;">Визуальный сторителлинг с глубоким сапфировым WebGL-шейдером и кастомным курсором.</p>
+          <div class="chips"><span>WebGL</span><span>Имидж</span><span>Шейдеры</span></div>
+          <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <!-- Вот она, магия iframe -->
+            <button onclick="openDemo('prefabs_live/abyss_art_direction.html')" class="ghost-btn" style="font-size:11px; padding:10px;">LIVE DEMO</button>
+            <a href="https://t.me/MiheichMX?text=Привет!%20Хочу%20префаб%20ABYSS" target="_blank" class="ghost-btn" style="font-size:11px; padding:10px; border-color:var(--pink);">ЗАБРАТЬ</a>
+          </div>
+        </article>
+
+        <!-- ПРЕФАБ 2: NEBULA -->
+        <article class="system-card">
+          <div class="system-top"><span>02</span><span style="color: var(--cyan);">Креатив</span></div>
+          <h3>NEBULA</h3>
+          <div class="perspective-img">
+            <div style="width:100%; aspect-ratio:3/2; background:#04070d; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(50,215,255,0.3);">
+              <span style="font-family:'Terminator', monospace; color:var(--muted); font-size:11px;"><img src="prefabs_live/images-vitrina/nebula_studio.webp" alt=""></span>
+            </div>
+          </div>
+          <p style="font-size: 15px;">Графитовый интерфейс с эффектом пленочного шума и 3D-tilt карточками при наведении.</p>
+          <div class="chips"><span>Агентство</span><span>3D-Hover</span><span>Шум</span></div>
+          <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button onclick="openDemo('prefabs_live/nebula_studio.html')" class="ghost-btn" style="font-size:11px; padding:10px;">LIVE DEMO</button>
+            <a href="https://t.me/MiheichMX?text=Привет!%20Хочу%20префаб%20NEBULA" target="_blank" class="ghost-btn" style="font-size:11px; padding:10px; border-color:var(--pink);">ЗАБРАТЬ</a>
+          </div>
+        </article>
+
+        <!-- ПРЕФАБ 3: KINETIC -->
+        <article class="system-card">
+          <div class="system-top"><span>03</span><span style="color: var(--cyan);">Финтех / B2B</span></div>
+          <h3>KINETIC</h3>
+          <div class="perspective-img">
+            <div style="width:100%; aspect-ratio:3/2; background:#04070d; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(50,215,255,0.3);">
+              <span style="font-family:'Terminator', monospace; color:var(--muted); font-size:11px;"><img src="prefabs_live/images-vitrina/kinetic_architecture.webp" alt=""></span>
+            </div>
+          </div>
+          <p style="font-size: 15px;">Архитектура сложных интерфейсов. Сливовые тона, жидкий фон и магнитные элементы.</p>
+          <div class="chips"><span>SaaS</span><span>Строгость</span><span>Магниты</span></div>
+          <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button onclick="openDemo('prefabs_live/kinetic_architecture.html')" class="ghost-btn" style="font-size:11px; padding:10px;">LIVE DEMO</button>
+            <a href="https://t.me/MiheichMX?text=Привет!%20Хочу%20префаб%20KINETIC" target="_blank" class="ghost-btn" style="font-size:11px; padding:10px; border-color:var(--pink);">ЗАБРАТЬ</a>
+          </div>
+        </article>
+
+        <!-- ПРЕФАБ 4: SYNAPSE -->
+        <article class="system-card">
+          <div class="system-top"><span>04</span><span style="color: var(--cyan);">Инновации</span></div>
+          <h3>SYNAPSE</h3>
+          <div class="perspective-img">
+            <div style="width:100%; aspect-ratio:3/2; background:#04070d; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(50,215,255,0.3);">
+              <span style="font-family:'Terminator', monospace; color:var(--muted); font-size:11px;"><img src="prefabs_live/images-vitrina/synapse_innovation.webp" alt=""></span>
+            </div>
+          </div>
+          <p style="font-size: 15px;">Глубокий изумрудный цвет, бегущие строки и интерактивная WebGL-сетка для AI-стартапов.</p>
+          <div class="chips"><span>AI-Стартап</span><span>Сетка</span><span>UX/UI</span></div>
+          <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button onclick="openDemo('prefabs_live/synapse_innovation.html')" class="ghost-btn" style="font-size:11px; padding:10px;">LIVE DEMO</button>
+            <a href="https://t.me/MiheichMX?text=Привет!%20Хочу%20префаб%20SYNAPSE" target="_blank" class="ghost-btn" style="font-size:11px; padding:10px; border-color:var(--pink);">ЗАБРАТЬ</a>
+          </div>
+        </article>
+
+        <!-- ПРЕФАБ 5: AURORA -->
+        <article class="system-card">
+          <div class="system-top"><span>05</span><span style="color: var(--cyan);">Синтез среды</span></div>
+          <h3>AURORA</h3>
+          <div class="perspective-img">
+            <div style="width:100%; aspect-ratio:3/2; background:#04070d; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(50,215,255,0.3);">
+              <span style="font-family:'Terminator', monospace; color:var(--muted); font-size:11px;"><img src="prefabs_live/images-vitrina/sev-siyan.webp" alt=""></span>
+            </div>
+          </div>
+          <p style="font-size: 15px;">Процедурная генерация северного сияния. Ультра-эстетика для топовых ивент-агентств.</p>
+          <div class="chips"><span>Свечение</span><span>Event</span><span>Генерация</span></div>
+          <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button onclick="openDemo('prefabs_live/sev-siyan.html')" class="ghost-btn" style="font-size:11px; padding:10px;">LIVE DEMO</button>
+            <a href="https://t.me/MiheichMX?text=Привет!%20Хочу%20префаб%20AURORA" target="_blank" class="ghost-btn" style="font-size:11px; padding:10px; border-color:var(--pink);">ЗАБРАТЬ</a>
+          </div>
+        </article>
+
+        <!-- ПРЕФАБ 6: ИСТРА -->
+        <article class="system-card">
+          <div class="system-top"><span>06</span><span style="color: var(--cyan);">Автобизнес</span></div>
+          <h3>ТЕХЦЕНТР</h3>
+          <div class="perspective-img">
+            <div style="width:100%; aspect-ratio:3/2; background:#04070d; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(50,215,255,0.3);">
+              <span style="font-family:'Terminator', monospace; color:var(--muted); font-size:11px;"><img src="prefabs_live/images-vitrina/tehservis.webp" alt=""></span>
+            </div>
+          </div>
+          <p style="font-size: 15px;">Жесткий конверсионный инструмент. Квиз-система, сбор лидов и разбор болячек моторов.</p>
+          <div class="chips"><span>Лидген</span><span>Квиз</span><span>Конверсия</span></div>
+          <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <!-- Вставь тут точное название файла автосервиса, если оно не index_2.html -->
+            <button onclick="openDemo('prefabs_live/tehservis.html')" class="ghost-btn" style="font-size:11px; padding:10px;">LIVE DEMO</button>
+            <a href="https://t.me/MiheichMX?text=Привет!%20Хочу%20префаб%20ТЕХЦЕНТР" target="_blank" class="ghost-btn" style="font-size:11px; padding:10px; border-color:var(--pink);">ЗАБРАТЬ</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+    </main> <!-- ЗАКРЫВАЕМ MAIN ЗДЕСЬ, ДО ФУТЕРА -->
+
+  <!-- ТЕРМИНАЛ СВЯЗИ (ФУТЕР НА ВСЮ ШИРИНУ) -->
+  <section class="contact" id="contact" style="position: relative; width: 100%; background-color: #070a12; border-top: 1px solid rgba(52,215,255,0.15); overflow: hidden;">
+    
+    <!-- Фоновый слой на 100% ширины -->
+    <div class="contact-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.4; pointer-events: none;"></div>
+    
+    <!-- Контентный контейнер -->
+    <div style="position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 80px 40px 40px;">
+      <div class="contact-grid">
+        
+        <!-- Колонка 1: Бренд и Аватар -->
+        <div class="contact-brand">
+          <div class="avatar-gradient-frame">
+            <img class="footer-avatar" src="assets/avatar/social_media_avatar_footer.webp" alt="MIHEICH">
+          </div>
+          <div class="footer-tagline">Разработка и упаковка<br>отказоустойчивых b2b систем</div>
+        </div>
+
+        <!-- Колонка 2: Командный хаб -->
+        <div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">КОМАНДНЫЙ ХАБ</div>
+          <nav class="footer-nav">
+            <a href="index.html#services">Инженерный стек</a>
+            <a href="index.html#presentations">Презентации</a>
+            <a href="index.html#geo">Геомаркетинг</a>
+            <a href="index.html#web">WEB-сайты</a>
+            <a href="index.html#contact">Контакты</a>
+          </nav>
+        </div>
+
+        <!-- Колонка 3: Пустота под партнерские ссылки -->
+        <div class="partner-space">
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">ПАРТНЕРСКАЯ СЕТЬ</div>
+          <div class="empty-slot">Блок в разработке...</div>
+        </div>
+
+        <!-- Колонка 4: Терминал связи -->
+        <div>
+          <div class="kicker" style="font-size: 16px; letter-spacing: 2px;">ТЕРМИНАЛ СВЯЗИ</div>
+          <div class="contact-links cyber-contacts" style="margin-top: 15px;">
+            <a href="https://t.me/MiheichMX" target="_blank" rel="noopener noreferrer">
+              <span class="cyber-icon tg-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </span>
+              @MiheichMX
+            </a>
+       
+            <a href="mailto:miheich-master@ya.ru">
+              <span class="cyber-icon mail-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M2 4h20v16H2z"></path><polyline points="22,4 12,13 2,4"></polyline></svg>
+              </span>
+              miheich-master@ya.ru
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom" style="
+        position: relative !important;
+        inset: auto !important;
+        margin: 60px 0 0 0 !important; 
+        border-top: 1px solid rgba(255,255,255,0.05); 
+        padding: 25px 0 40px 0 !important; 
+        display: flex !important; 
+        justify-content: space-between !important; 
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+        width: 100% !important;
+        clear: both !important;
+      ">
+        <div style="color: var(--muted); font-size: 13px;">
+          <span>© 2026 MIHEICH MX.</span> Все системы функционируют в штатном режиме.
+        </div>
+        <div>
+          <a href="#" style="color: var(--muted); text-decoration: none; font-size: 13px;">Политика конфиденциальности</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- СКРИПТЫ ВСЕГДА В САМОМ НИЗУ, ПОСЛЕ ФУТЕРА -->
+  <script src="script.js"></script>
+ 
+
+  <script src="script.js"></script>
+  <!-- КИБЕР-МОДАЛКА ДЛЯ ПРОСМОТРА ПРЕФАБОВ -->
+<div id="demo-modal" class="demo-modal-overlay hidden">
+  <div class="demo-modal-content">
+    <div class="demo-modal-header">
+      <span class="demo-modal-title">ТЕРМИНАЛ ПРЕДПРОСМОТРА</span>
+      <button class="demo-close-btn" onclick="closeDemo()">ЗАКРЫТЬ [X]</button>
+    </div>
+    <!-- Сюда будет загружаться сам сайт -->
+    <iframe id="demo-iframe" src="" frameborder="0"></iframe>
+  </div>
+</div>
+</body>
+</html>
