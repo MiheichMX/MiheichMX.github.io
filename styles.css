@@ -903,3 +903,15 @@ section:target {
     50% { transform: translateY(-15px); }
     100% { transform: translateY(0px); }
 }
+
+.hero-avatar {
+    position: relative;
+    width: 100%;
+    min-width: 500px; /* Жестко задаем стартовый размер */
+    max-width: 800px; /* Расширяем лимит роста */
+    margin: -120px auto 0 auto; /* Сдвигаем повыше, чтобы он мощно возвышался над метриками */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
