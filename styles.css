@@ -906,15 +906,13 @@ section:target {
 }
 
 .hero-avatar {
-    position: relative;
-    width: 100%;
-    min-width: 500px; /* Жестко задаем стартовый размер */
-    max-width: 800px; /* Расширяем лимит роста */
-    margin: -120px auto 0 auto; /* Сдвигаем повыше, чтобы он мощно возвышался над метриками */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
+    position: absolute;
+    right: 0; /* Прижимаем вправо */
+    bottom: 100px; /* Сдвигаем вниз */
+    width: 65%;
+    max-width: 720px;
+    z-index: 2; /* У плашки метрик z-index: 4, поэтому ноги аккуратно уйдут за неё */
+    pointer-events: none;
 }
 
 /* Единый контейнер аватара */
