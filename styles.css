@@ -891,11 +891,12 @@ section:target {
 }
 
 .cyber-avatar {
-    max-width: 400px; /* Размер подгонишь по месту */
-    display: block;
-    margin: 0 auto;
+    width: 130%; /* Принудительно вылезаем за рамки узкой колонки */
+    height: auto;
+    object-fit: contain;
     animation: float 4s ease-in-out infinite;
-    filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6)); /* Циановое свечение контура */
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4)) 
+            drop-shadow(0 0 40px rgba(255, 0, 128, 0.2)); 
 }
 
 @keyframes float {
