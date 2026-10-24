@@ -889,3 +889,17 @@ section:target {
   height: 100%;
   background: #fff; /* Если префаб долго грузится, не будет черной дыры */
 }
+
+.cyber-avatar {
+    max-width: 400px; /* Размер подгонишь по месту */
+    display: block;
+    margin: 0 auto;
+    animation: float 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.6)); /* Циановое свечение контура */
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
